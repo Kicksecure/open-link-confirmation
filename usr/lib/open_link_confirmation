@@ -9,6 +9,9 @@
 #set -x
 
 main_function() {
+   ## Used by tb-starter.
+   export OPEN_LINK_CONFIRMATION="true"
+
    local i
 
    for i in /etc/open_link_confirm.d/*; do
@@ -77,11 +80,11 @@ Use Tor Browser under Workstation to browse the internet."
          exit 0
       fi
 
-   elif [ -f "/usr/share/anon-ws-base-files/workstation" ]; then
+   else
       local icon="/usr/share/icons/anon-icon-pack/whonix.ico"
-      local open_in_tool_bin="torbrowser"
-      local open_in_tool_bin_name="Tor Browser"
-      local open_in_tool_extra_opts="--new-window"
+      local open_in_tool_bin="x-www-browser"
+      local open_in_tool_bin_name="x-www-browser ($(readlink -f /usr/bin/x-www-browser))"
+      #local open_in_tool_extra_opts="--new-window"
       local title="Confirm Open"
 
       local trim="128"
@@ -117,13 +120,6 @@ Be careful if $open_in_tool_bin_name is already running as your activities might
 
 $temp$extra_long_link"
       fi
-   else
-      local icon="/usr/share/icons/anon-icon-pack/whonix.ico"
-      local title="Open Link Confirm ERROR"
-      local msg="ERROR $0 script could not determine if this is a Gateway or a Workstation. Please report this bug."
-      echo "$msg"
-      zenity --no-markup --title="$title" --error --window-icon "$icon" --text "$msg"
-      exit 1
    fi
 
    local answer

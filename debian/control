@@ -14,16 +14,16 @@ Standards-Version: 3.9.4
 
 Package: open-link-confirmation
 Architecture: all
-Depends: zenity, sensible-utils, ${misc:Depends}
-Description: Deactivates KDE's system sounds
- On a Gateway (when the anon-gw-base-files package is installed), it honors the
- $EDITOR environment variable (falls back to kwrite if unset), asks if a file
- should be opened in an editor before opening it and informs, that opening
- links on a Gateway is unsupported for security reasons.
+Depends: zenity, sensible-utils, anon-icon-pack, ${misc:Depends}
+Description: Asks for confirmation before opening links
+ Asks before a link is (accidentally) opened in a browser. Links are opened in
+ x-www-browser.
  .
- On a Workstation (when the anon-ws-base-files package is installed), it asks
- before a link is (accidentally) opened in a browser.
+ Currently only the Tor Browser starter from the tb-starter package (by Whonix
+ developers) supports using open-link-confirmation. Shell wrappers could be
+ written to support other browsers as well.
  .
- Currently only supports anonymity distributions and Tor Browser. Patches are
- welcome to make it run on non-anonymous operating systems as well as to make
- the browser configurable.
+ On an Anonymity Gateway (when the anon-gw-base-files package is installed), it
+ honors the $EDITOR environment variable (falls back to kwrite if unset), asks
+ if a file should be opened in an editor before opening it and informs, that
+ opening links on a Gateway is unsupported for security reasons.

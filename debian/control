@@ -1,0 +1,29 @@
+## This file is part of Whonix.
+## Copyright (C) 2012 - 2014 Patrick Schleizer <adrelanos@riseup.net>
+## See the file COPYING for copying conditions.
+
+Source: open-link-confirmation
+Section: misc
+Priority: optional
+Maintainer: Patrick Schleizer <adrelanos@riseup.net>
+Build-Depends: debhelper (>= 8), faketime, git
+Homepage: https://github.com/Whonix/open-link-confirmation
+Vcs-Browser: https://github.com/Whonix/open-link-confirmation
+Vcs-Git: https://github.com/Whonix/open-link-confirmation.git
+Standards-Version: 3.9.4
+
+Package: open-link-confirmation
+Architecture: all
+Depends: zenity, sensible-utils, ${misc:Depends}
+Description: Deactivates KDE's system sounds
+ On a Gateway (when the anon-gw-base-files package is installed), it honors the
+ $EDITOR environment variable (falls back to kwrite if unset), asks if a file
+ should be opened in an editor before opening it and informs, that opening
+ links on a Gateway is unsupported for security reasons.
+ .
+ On a Workstation (when the anon-ws-base-files package is installed), it asks
+ before a link is (accidentally) opened in a browser.
+ .
+ Currently only supports anonymity distributions and Tor Browser. Patches are
+ welcome to make it run on non-anonymous operating systems as well as to make
+ the browser configurable.

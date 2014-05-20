@@ -1,0 +1,18 @@
+## This file is part of Whonix.
+## Copyright (C) 2012 - 2014 Patrick Schleizer <adrelanos@riseup.net>
+## See the file COPYING for copying conditions.
+
+## Please use "/etc/open_link_confirm.d/50_user" for your custom configuration,
+## which will override the defaults found here. When this package is updated, this
+## file may be overwritten.
+
+## Enable (1) or disable (0) confirmation before opening links in default Tor
+## Browser. Be careful if Tor Browser is already running as your activities
+## might get linked.
+link_confirmation_for_links=1
+
+## Enable (1) or disable (0) confirmation before opening files in default Tor
+## Browser. Be careful if Tor Browser is already running as your activities
+## might get linked. Also local files can instruct your browser to fetch
+## resources from the network.
+link_confirmation_for_files=1

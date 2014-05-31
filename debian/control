@@ -27,3 +27,6 @@ Description: Asks for confirmation before opening links
  honors the $EDITOR environment variable (falls back to kwrite if unset), asks
  if a file should be opened in an editor before opening it and informs, that
  opening links on a Gateway is unsupported for security reasons.
+ .
+ This package is produced independently of, and carries no guarantee from,
+ The Tor Project.

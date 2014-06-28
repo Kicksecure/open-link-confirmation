@@ -72,11 +72,14 @@ main_function() {
          $open_in_tool_bin $open_in_tool_extra_opts ${1+"$@"} >/dev/null 2>/dev/null || { open_in_tool_exit_code="$?" ; true; };
          exit "$open_in_tool_exit_code"
       else
-         local title="Link Confirm Open ERROR"
-         local msg="Link Confirm Open does not support opening links on Gateway for security reasons.
-
-Use Tor Browser under Workstation to browse the internet."
-         zenity --no-markup --title="$title" --error --window-icon "$icon" --text "$msg"
+         local icon="error"
+         local title="Whonix Confirm Open ERROR"
+         local msg="<p>Whonix does not support opening links on Whonix-Gateway for security reasons.</p>
+                    <p>Use Tor Browser under Whonix-Workstation to browse the internet.</p>"
+         local question=""
+         local button="ok"
+         /usr/lib/whonix/generic_gui_message $icon $title $msg $question $button
+         #zenity --no-markup --title="$title" --error --window-icon "$icon" --text "$msg"
          exit 0
       fi
 
@@ -99,26 +102,26 @@ Use Tor Browser under Workstation to browse the internet."
       temp="${temp:0:$trim}"
 
       if [ "$temp_string_length" -gt "$trim" ]; then
-         local extra_long_link="
-
-Note: The address is too long, so only the first $trim characters are shown."
+         local extra_long_link="<p>Note: The address is too long, so only the first $trim characters are shown.</p>"
       fi
 
       if [ "$temp" = "" ] || [ "$temp" = " " ]; then
-         local msg="Do you want to open $open_in_tool_bin_name?
-
-Be careful if $open_in_tool_bin_name is already running as your activities might get linked."
+         local icon="warning"
+         local msg="<p>Beware, if $open_in_tool_bin_name is already running, your activities might get linked.</p>"
+         local question="Do you want to open $open_in_tool_bin_name?"
+         local button="yesno"
       else
          if [ "$is_file" = "1" ]; then
             local type="file"
          else
             local type="link"
          fi
-         local msg="The following $type will be opened in $open_in_tool_bin_name. Continue?
-
-Be careful if $open_in_tool_bin_name is already running as your activities might get linked.
-
-$temp$extra_long_link"
+         local icon="warning"
+         local msg="<p>The following $type will be opened in $open_in_tool_bin_name.</p>
+                    <p>Beware, if $open_in_tool_bin_name is already running, your activities might get linked.</p>"
+#$temp$extra_long_link"
+         local question="Continue?"
+         local button="yesno"
       fi
    fi
 
@@ -143,10 +146,11 @@ $temp$extra_long_link"
    fi
 
    if [ "$ask_for_confirmation" = "1" ]; then
-      zenity --no-markup --title="$title" --question --window-icon "$icon" --text "$msg" >/dev/null 2>/dev/null || { answer="$?" ; true; };
+      answer="$(/usr/lib/whonix/generic_gui_message "$icon" "$title" "$msg" "$question" "$button")"
+      #zenity --no-markup --title="$title" --question --window-icon "$icon" --text "$msg" >/dev/null 2>/dev/null || { answer="$?" ; true; };
    fi
 
-   if [ "$answer" = "1" ]; then
+   if [ "$answer" = "65536" ]; then  # button 'No'
       exit 0
    fi
 
@@ -156,7 +160,8 @@ $temp$extra_long_link"
 
    if [ ! "$command_v_exit_code" = "0" ]; then
       local msg="ERROR: $open_in_tool_bin does not exist! Please report this bug!"
-      zenity --no-markup --title="$title" --error --window-icon "$icon" --text "$msg"
+      /usr/lib/whonix/generic_gui_message "$icon" "$title" "$msg" "$question" "$button"
+      #zenity --no-markup --title="$title" --error --window-icon "$icon" --text "$msg"
       exit 1
    fi
 
@@ -166,7 +171,8 @@ $temp$extra_long_link"
 
    if [ ! "$open_in_tool_exit_code" = "0" ]; then
       local msg="ERROR: $open_in_tool_bin returned $open_in_tool_exit_code! Please report this bug!"
-      zenity --no-markup --title="$title" --error --window-icon "$icon" --text "$msg"
+      /usr/lib/whonix/generic_gui_message "$icon" "$title" "$msg" "$question" "$button"
+      #zenity --no-markup --title="$title" --error --window-icon "$icon" --text "$msg"
    fi
 
    exit "$open_in_tool_exit_code"

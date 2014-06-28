@@ -78,7 +78,7 @@ main_function() {
                     <p>Use Tor Browser under Whonix-Workstation to browse the internet.</p>"
          local question=""
          local button="ok"
-         /usr/lib/generic_gui_message $icon $title $msg $question $button
+         /usr/lib/generic_gui_message "$icon" "$title" "$msg" "$question" "$button"
          #zenity --no-markup --title="$title" --error --window-icon "$icon" --text "$msg"
          exit 0
       fi

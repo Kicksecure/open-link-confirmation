@@ -73,7 +73,7 @@ main_function() {
          exit "$open_in_tool_exit_code"
       else
          local icon="error"
-         local title="Whonix Confirm Open ERROR"
+         local title="Link Confirm Open ERROR"
          local msg="<p>Whonix does not support opening links on Whonix-Gateway for security reasons.</p>
                     <p>Use Tor Browser under Whonix-Workstation to browse the internet.</p>"
          local question=""

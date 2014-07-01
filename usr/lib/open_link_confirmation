@@ -4,8 +4,6 @@
 ## Copyright (C) 2012 - 2014 Patrick Schleizer <adrelanos@riseup.net>
 ## See the file COPYING for copying conditions.
 
-## Using zenity with --no-markup for security reasons.
-
 #set -x
 
 main_function() {
@@ -79,7 +77,6 @@ main_function() {
          local question=""
          local button="ok"
          /usr/lib/generic_gui_message "$icon" "$title" "$msg" "$question" "$button"
-         #zenity --no-markup --title="$title" --error --window-icon "$icon" --text "$msg"
          exit 0
       fi
 
@@ -148,7 +145,6 @@ main_function() {
 
    if [ "$ask_for_confirmation" = "1" ]; then
       answer="$(/usr/lib/generic_gui_message "$icon" "$title" "$msg" "$question" "$button")"
-      #zenity --no-markup --title="$title" --question --window-icon "$icon" --text "$msg" >/dev/null 2>/dev/null || { answer="$?" ; true; };
    fi
 
    if [ "$answer" = "65536" ]; then  # button 'No'
@@ -162,7 +158,6 @@ main_function() {
    if [ ! "$command_v_exit_code" = "0" ]; then
       local msg="<p>ERROR: $open_in_tool_bin does not exist! Please report this bug!</p>"
       /usr/lib/generic_gui_message "$icon" "$title" "$msg" "$question" "$button"
-      #zenity --no-markup --title="$title" --error --window-icon "$icon" --text "$msg"
       exit 1
    fi
 
@@ -173,7 +168,6 @@ main_function() {
    if [ ! "$open_in_tool_exit_code" = "0" ]; then
       local msg="<p>ERROR: $open_in_tool_bin returned $open_in_tool_exit_code! Please report this bug!</p>"
       /usr/lib/generic_gui_message "$icon" "$title" "$msg" "$question" "$button"
-      #zenity --no-markup --title="$title" --error --window-icon "$icon" --text "$msg"
    fi
 
    exit "$open_in_tool_exit_code"

@@ -138,7 +138,7 @@ main_function() {
       fi
    else
       ## Got a Link.
-      if [ "$tb_link_confirmation_for_links" = "0" ]; then
+      if [ "$link_confirmation_for_links" = "0" ]; then
          local ask_for_confirmation="0"
       else
          local ask_for_confirmation="1"

@@ -101,14 +101,14 @@ main_function() {
       temp="$(/usr/lib/msgcollector/striphtml "$temp")"
 
       if [ "$temp_string_length" -gt "$trim" ]; then
-         local extra_long_link="<p>Note: The address is too long, so only the first $trim characters are shown.</p>"
+         local extra_long_link="<p><b>Note</b>: The address is too long, so only the first <u>$trim</u> characters are shown.</p>"
       fi
 
       if [ "$temp" = "" ] || [ "$temp" = " " ]; then
          local icon="warning"
-         local msg="<p>Be careful if $open_in_tool_bin_name is already running as your activities might get linked.</p>
+         local msg="<p>Be careful if <b>$open_in_tool_bin_name</b> is already running as your activities might get linked.</p>
 <p>$temp$extra_long_link</p>"
-         local question="Do you want to open $open_in_tool_bin_name?"
+         local question="Do you want to open <b>$open_in_tool_bin_name</b>?"
          local button="yesno"
       else
          if [ "$is_file" = "1" ]; then
@@ -117,9 +117,9 @@ main_function() {
             local type="link"
          fi
          local icon="warning"
-         local msg="<p>The following $type will be opened in $open_in_tool_bin_name.</p>
-<p>Be careful if $open_in_tool_bin_name is already running as your activities might get linked.</p>
-<p>$temp$extra_long_link</p>"
+         local msg="<p>The following <b>$type</b> will be opened in <u>$open_in_tool_bin_name</u>.</p>
+<p>Be careful if <u>$open_in_tool_bin_name</u> is already running as your activities might get linked.</p>
+<p><blockquote><code>$temp$extra_long_link</code><blockquote></p>"
          local question="Continue?"
          local button="yesno"
       fi
@@ -158,7 +158,7 @@ main_function() {
    command -v $open_in_tool_bin >/dev/null 2>/dev/null || { command_v_exit_code="$?" ; true; };
 
    if [ ! "$command_v_exit_code" = "0" ]; then
-      local msg="<p>ERROR: $open_in_tool_bin does not exist! Please report this bug!</p>"
+      local msg="<p><b><u>ERROR</b></u>: <b>$open_in_tool_bin</b> does not exist! Please report this bug!</p>"
       /usr/lib/generic_gui_message "$icon" "$title" "$msg" "$question" "$button"
       exit 1
    fi
@@ -168,7 +168,7 @@ main_function() {
    $open_in_tool_bin $open_in_tool_extra_opts ${1+"$@"} >/dev/null 2>/dev/null || { open_in_tool_exit_code="$?" ; true; };
 
    if [ ! "$open_in_tool_exit_code" = "0" ]; then
-      local msg="<p>ERROR: $open_in_tool_bin returned $open_in_tool_exit_code! Please report this bug!</p>"
+      local msg="<p><b><u>ERROR</b></u>: <b>$open_in_tool_bin</b> returned <u>$open_in_tool_exit_code</u>! Please report this bug!</p>"
       /usr/lib/generic_gui_message "$icon" "$title" "$msg" "$question" "$button"
    fi
 

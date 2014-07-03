@@ -98,6 +98,8 @@ main_function() {
       ## Trim temp to 128 characters.
       temp="${temp:0:$trim}"
 
+      temp="$(/usr/lib/msgcollector/striphtml "${1+"$@"}")"
+
       if [ "$temp_string_length" -gt "$trim" ]; then
          local extra_long_link="<p>Note: The address is too long, so only the first $trim characters are shown.</p>"
       fi

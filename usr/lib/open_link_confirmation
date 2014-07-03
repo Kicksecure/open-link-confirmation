@@ -147,7 +147,7 @@ main_function() {
       answer="$(/usr/lib/generic_gui_message "$icon" "$title" "$msg" "$question" "$button")"
    fi
 
-   if [ "$answer" = "65536" ]; then  # button 'No'
+   if [ ! "$answer" = "16384" ]; then ## Button 'Yes' has not been pressed.
       exit 0
    fi
 

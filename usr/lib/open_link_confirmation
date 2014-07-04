@@ -83,10 +83,9 @@ main_function() {
    else
       local icon="/usr/share/icons/anon-icon-pack/whonix.ico"
       local open_in_tool_bin="x-www-browser"
-      local open_in_tool_bin_name_readlink="$(readlink -f /usr/bin/x-www-browser)"
+      local open_in_tool_bin_name_readlink="$(readlink -f "/usr/bin/x-www-browser")"
       local open_in_tool_bin_name="x-www-browser ($open_in_tool_bin_name_readlink)"
       #local open_in_tool_extra_opts="--new-window"
-      local title="Confirm Open"
 
       local trim="128"
 
@@ -105,19 +104,31 @@ main_function() {
          local extra_long_link="<p><b>Note</b>: The address is too long, so only the first <u>$trim</u> characters are shown.</p>"
       fi
 
-      if [ "$temp" = "" ] || [ "$temp" = " " ]; then
+      if [ "$is_file" = "1" ]; then
+         local type="file"
+      else
+         local type="link"
+      fi
+
+      if [ "$open_in_tool_bin_name_readlink" = "$0" ]; then
+         local icon="error"
+         local title="Link Confirm Open ERROR"
+         local msg="<p>The following <b>$type</b> cannot be opened in <u>$open_in_tool_bin_name</u>, because no browser is installed, that supports open-link-confirmation.</p>
+<p><blockquote><code>$temp$extra_long_link</code><blockquote></p>"
+         local question=""
+         local button="ok"
+         /usr/lib/msgcollector/generic_gui_message "$icon" "$title" "$msg" "$question" "$button"
+         exit 0
+      elif [ "$temp" = "" ] || [ "$temp" = " " ]; then
          local icon="warning"
+         local title="Confirm Open"
          local msg="<p>Be careful if <b>$open_in_tool_bin_name</b> is already running as your activities might get linked.</p>
 <p>$temp$extra_long_link</p>"
          local question="Do you want to open <b>$open_in_tool_bin_name</b>?"
          local button="yesno"
       else
-         if [ "$is_file" = "1" ]; then
-            local type="file"
-         else
-            local type="link"
-         fi
          local icon="warning"
+         local title="Confirm Open"
          local msg="<p>The following <b>$type</b> will be opened in <u>$open_in_tool_bin_name</u>.</p>
 <p>Be careful if <u>$open_in_tool_bin_name</u> is already running as your activities might get linked.</p>
 <p><blockquote><code>$temp$extra_long_link</code><blockquote></p>"

@@ -76,7 +76,7 @@ main_function() {
 <p>Use Tor Browser under Workstation to browse the internet.</p>"
          local question=""
          local button="ok"
-         /usr/lib/generic_gui_message "$icon" "$title" "$msg" "$question" "$button"
+         /usr/lib/msgcollector/generic_gui_message "$icon" "$title" "$msg" "$question" "$button"
          exit 0
       fi
 
@@ -146,7 +146,7 @@ main_function() {
    fi
 
    if [ "$ask_for_confirmation" = "1" ]; then
-      answer="$(/usr/lib/generic_gui_message "$icon" "$title" "$msg" "$question" "$button")"
+      answer="$(/usr/lib/msgcollector/generic_gui_message "$icon" "$title" "$msg" "$question" "$button")"
    fi
 
    if [ ! "$answer" = "16384" ]; then ## Button 'Yes' has not been pressed.
@@ -159,7 +159,7 @@ main_function() {
 
    if [ ! "$command_v_exit_code" = "0" ]; then
       local msg="<p><b><u>ERROR</b></u>: <b>$open_in_tool_bin</b> does not exist! Please report this bug!</p>"
-      /usr/lib/generic_gui_message "$icon" "$title" "$msg" "$question" "$button"
+      /usr/lib/msgcollector/generic_gui_message "$icon" "$title" "$msg" "$question" "$button"
       exit 1
    fi
 
@@ -169,7 +169,7 @@ main_function() {
 
    if [ ! "$open_in_tool_exit_code" = "0" ]; then
       local msg="<p><b><u>ERROR</b></u>: <b>$open_in_tool_bin</b> returned <u>$open_in_tool_exit_code</u>! Please report this bug!</p>"
-      /usr/lib/generic_gui_message "$icon" "$title" "$msg" "$question" "$button"
+      /usr/lib/msgcollector/generic_gui_message "$icon" "$title" "$msg" "$question" "$button"
    fi
 
    exit "$open_in_tool_exit_code"

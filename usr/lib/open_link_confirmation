@@ -83,7 +83,8 @@ main_function() {
    else
       local icon="/usr/share/icons/anon-icon-pack/whonix.ico"
       local open_in_tool_bin="x-www-browser"
-      local open_in_tool_bin_name="x-www-browser ($(readlink -f /usr/bin/x-www-browser))"
+      local open_in_tool_bin_name_readlink="$(readlink -f /usr/bin/x-www-browser)"
+      local open_in_tool_bin_name="x-www-browser ($open_in_tool_bin_name_readlink)"
       #local open_in_tool_extra_opts="--new-window"
       local title="Confirm Open"
 

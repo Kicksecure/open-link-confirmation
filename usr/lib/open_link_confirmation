@@ -25,6 +25,8 @@ main_function() {
             true "skip $i"
             continue
          fi
+         ## TODO
+         bash -n "$i" || exit 1
          source "$i"
       fi
    done

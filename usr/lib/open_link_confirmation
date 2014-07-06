@@ -112,7 +112,7 @@ main_function() {
          local type="link"
       fi
 
-      if [ "$open_in_tool_bin_name_readlink" = "$0" ]; then
+      if [ "$open_in_tool_bin_name_readlink" = "$BASH_SOURCE" ]; then
          local icon="error"
          local title="Link Confirm Open ERROR"
          local msg="<p>The following <b>$type</b> cannot be opened in <u>$open_in_tool_bin_name</u>, because no browser is installed, that supports open-link-confirmation.</p>

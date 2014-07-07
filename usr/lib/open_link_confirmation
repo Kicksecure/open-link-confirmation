@@ -87,7 +87,7 @@ main_function() {
       local open_in_tool_bin="x-www-browser"
       local open_in_tool_bin_name_readlink="$(readlink -f "/usr/bin/x-www-browser")"
       local open_in_tool_bin_name="x-www-browser ($open_in_tool_bin_name_readlink)"
-      #local open_in_tool_extra_opts="--new-window"
+      local open_in_tool_extra_opts="--new-tab"
 
       local trim="128"
 

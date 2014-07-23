@@ -90,7 +90,7 @@ main_function() {
       local open_in_tool_extra_opts="--new-tab"
 
       ## Prettier name in default case.
-      if [ "$open_in_tool_bin_name" = "x-www-browser (usr/bin/torbrowser)" ]; then
+      if [ "$open_in_tool_bin_name" = "x-www-browser (/usr/bin/torbrowser)" ]; then
          open_in_tool_bin_name="Tor Browser"
       fi
 

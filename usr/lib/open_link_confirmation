@@ -121,7 +121,7 @@ main_function() {
          local icon="error"
          local title="Link Confirm Open ERROR"
          local msg="<p>The following <b>$type</b> cannot be opened in <u>$open_in_tool_bin_name</u>, because no browser is installed, that supports open-link-confirmation.</p>
-<p><blockquote><code>$temp$extra_long_link</code><blockquote></p>"
+<p><code><blockquote>$temp$extra_long_link</blockquote></code></p>"
          local question=""
          local button="ok"
          /usr/lib/msgcollector/generic_gui_message "$icon" "$title" "$msg" "$question" "$button"
@@ -138,7 +138,7 @@ main_function() {
          local title="Confirm Open"
          local msg="<p>The following <b>$type</b> will be opened in <u>$open_in_tool_bin_name</u>.</p>
 <p>Be careful if <u>$open_in_tool_bin_name</u> is already running as your activities might get linked.</p>
-<p><blockquote><code>$temp$extra_long_link</code><blockquote></p>"
+<p><code><blockquote>$temp$extra_long_link</code></blockquote></p>"
          local question="Continue?"
          local button="yesno"
       fi

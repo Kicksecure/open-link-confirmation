@@ -138,7 +138,7 @@ main_function() {
          local title="Confirm Open"
          local msg="<p>The following <b>$type</b> will be opened in <u>$open_in_tool_bin_name</u>.</p>
 <p>Be careful if <u>$open_in_tool_bin_name</u> is already running as your activities might get linked.</p>
-<p><code><blockquote>$temp$extra_long_link</code></blockquote></p>"
+<p><code><blockquote>$temp$extra_long_link</blockquote></code></p>"
          local question="Continue?"
          local button="yesno"
       fi

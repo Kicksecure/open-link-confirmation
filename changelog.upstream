@@ -1,0 +1,319 @@
+commit 4ce38b2a8a673b95f9415ad9e3222bdb7b17ff97
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Wed Feb 4 00:40:45 2015 +0000
+
+    updated makefile generic to version 1.3
+
+commit cf45a71f11ef0ba968f2ddd9f001479d742d5160
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Feb 3 23:58:49 2015 +0000
+
+    Added creation of upstream changelog to debian/rules
+
+commit 6f7383164b20bb1ac9dce24d74501b5c9549a435
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat Jan 17 05:59:57 2015 +0000
+
+    added graphical warning sign
+
+commit c37314af2f2bac24b6b7db8c388adba551faef85
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Wed Jan 7 19:34:49 2015 +0000
+
+    bumped compat from 8 to 9
+
+commit 5c9da53a7dbe921648d24f8b969201656411fda0
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Dec 5 19:01:16 2014 +0000
+
+    updated generic makefile
+
+commit 4e6169cf98e25be6b0cca17d3f20161113ddacec
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Oct 28 22:35:25 2014 +0000
+
+    makefile: refactoring, avoid using IFS
+
+commit 5cee86fd824a3511546c628600bf3b835cd9aae7
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat Oct 25 01:58:52 2014 +0000
+
+    makefile:
+    - make debdist; make undebdist
+    - cleanup
+    - refactoring
+
+commit 2542099bd979519ee5efd8bb69a4b02ea4429ec1
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Oct 23 22:43:03 2014 +0000
+
+    makefile:
+    - new target "make undist", which deletes the upstream tarball
+    - $DISTDIR variable for make (un)dist, which defaults to ".." and can be used to create upstream tarballs in arbitrary locations
+    - refactoring, all function names and global variables now start with "make_" to make the script `source`ing friendly
+    - made `source`able
+
+commit ab718ef69ed15d8f07189ea528514e8d44e9f9bb
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Oct 13 12:36:55 2014 +0000
+
+    readme
+
+commit 3c4cbcda64077c6aa9f3c51080d2553ee2ec0f9d
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Aug 19 18:52:40 2014 +0000
+
+    makefile: added new feature "make deb-chl-bumpup" - Bump upstream version number in debian/changelog.
+
+commit b7554a63f384a402662bc2e3d3bee54180860732
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Aug 17 20:54:25 2014 +0000
+
+    Updated debian/changelog.
+
+commit 374f7e5706438f6d7370f004ab081f268aab386b
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Aug 17 20:47:28 2014 +0000
+
+    Fixed changelog date.
+
+commit e0f10568a0730602170bdab9e25d6e32691c2a97
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Aug 17 18:03:29 2014 +0000
+
+    bump version number
+
+commit ef01644b0ae4eb121be34ef8795803af894811d5
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Aug 14 13:35:18 2014 +0000
+
+    Implemented make deb-icup: Combination of make deb-pkg, make deb-pkg-install and make deb-pkg-cleanup.
+
+commit 425d50971c59241805d4a1031b0040f61fc6b9cb
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Jul 31 17:25:24 2014 +0000
+
+    output
+
+commit d7d9908e8149c51a7b2870824c8f7486d566e769
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Jul 31 17:19:42 2014 +0000
+
+    output
+
+commit 87a71cac75486e5ec5bc7ec5962660c415bfa177
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Jul 27 12:42:27 2014 +0000
+
+    packaging
+
+commit 3c83b512b274adcb7af49ac20b4ba4488626a12d
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Jul 27 04:01:12 2014 +0000
+
+    packaging
+
+commit 7383005cbaf836afde72bcf9b33fda536f81d8cd
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat Jul 26 15:26:37 2014 +0000
+
+    packaging
+
+commit 0eba99c9d849ca203722f27d46e8c813ec8986c6
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat Jul 26 15:16:05 2014 +0000
+
+    packaging: removed build dependency on git, since the .git folder won't be included in the upstream tarball.
+
+commit ca37191e2644a25a77d7f450a6f0cdd645a5eff4
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Wed Jul 23 13:21:05 2014 +0000
+
+    fix
+
+commit 00b7a52fb0d12cd4d9dc508d20a22eabbda26981
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Wed Jul 23 12:34:49 2014 +0000
+
+    output: prettier default name
+
+commit 2d9cafa29390e0ad4025181c2c26458b1272b8be
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat Jul 12 17:11:02 2014 +0000
+
+    packaging
+
+commit 98c16ccc23eefa57b304e4955b250db346507136
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat Jul 12 15:34:18 2014 +0000
+
+    packaging
+
+commit 0394a9f2a7f039a1d3a3c2ce8294b91cd558ff25
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Jul 7 00:23:24 2014 +0000
+
+    fix
+
+commit 61fe20f7404de98ae670f82b9424b6929ac16000
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Jul 6 13:24:28 2014 +0000
+
+    use $BASH_SOURCE instead of $0
+
+commit a7d42be6b1a0d50dc877c3999338e9e130143ef5
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Jul 6 11:36:40 2014 +0000
+
+    sanity test; todo
+
+commit 0322c26c7ab54f4de055b778d8bc12d3d528c9d1
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat Jul 5 08:09:44 2014 +0000
+
+    Bumped debian revision number to avoid lintian warning "new-package-should-close-itp-bug" so we can use lintian --fail-on-warnings as sanity test.
+
+commit 5c899e6b2c9625cf8cfc8c3f8296ac1715d7a10e
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Jul 4 05:25:59 2014 +0000
+
+    fix; refactoring
+
+commit cac6e4b94137f7e91f779bd20bc64c95b0db1378
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Jul 4 04:51:07 2014 +0000
+
+    refactoring
+
+commit 9d0f0735da081f6675653bca67cac6462d1a2878
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Jul 4 04:29:50 2014 +0000
+
+    merged generic-gui-message into msgcollector
+
+commit 124a8eeb00af7582c1dd5e66e95608d61da16869
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Jul 3 14:17:52 2014 +0000
+
+    added html tags to output
+
+commit a3470d92e42b96999e0204ecc1bd615922ad656b
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Jul 3 14:07:51 2014 +0000
+
+    fix
+
+commit 01631ba1292003f69d8336f5547971bbc06e6ba6
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Jul 3 14:02:10 2014 +0000
+
+    fix
+
+commit 794215a6d37ef54ab8b4d3026009064a7af75ce0
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Jul 3 14:01:46 2014 +0000
+
+    fix
+
+commit 91a26143cf838e2230de6457037f31fad934d579
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Jul 3 13:09:28 2014 +0000
+
+    strip html before showing in generic_gui_message for security reasons
+
+commit 845a8ff4c63cce7266f905f0ad7e6806c65baa62
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Jul 3 13:04:24 2014 +0000
+
+    fix
+
+commit dd99168ff53ac0aa6caed2a3319f848ef8d6d979
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Jul 1 11:34:44 2014 +0000
+
+    removed zenity comments
+
+commit 3ca3d3daff543e2a3a0f270e66704ab2945efffc
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Jul 1 11:30:25 2014 +0000
+
+    updated dependency: zenity -> generic-gui-message
+
+commit b3725ed07a381f35cd8428ca18a3b4a4c2fc4d95
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Jun 29 23:06:42 2014 +0000
+
+    fix output
+
+commit 0e43902f13f78fba4de576100e3eaab4d4ca9ed0
+Author: troubadoour <trobador@riseup.net>
+Date:   Sun Jun 29 16:07:14 2014 +0000
+
+    removed extras. added some tags
+
+commit 143184e980ebf0ed37de13c96e46ebecb76c35fa
+Author: troubadoour <trobador@riseup.net>
+Date:   Sat Jun 28 19:15:19 2014 +0000
+
+    Link Confirm Open ERROR
+
+commit 94ec4f897949099fefeb7b89d2eb7c9aeb091daf
+Author: troubadoour <trobador@riseup.net>
+Date:   Sat Jun 28 19:07:32 2014 +0000
+
+    Link Confirm Open ERROR
+
+commit 71ebda3ae8a4c99664f9cab0d9671bd492e9da24
+Author: troubadoour <trobador@riseup.net>
+Date:   Sat Jun 28 13:11:03 2014 +0000
+
+    changed generic_gui_message path
+
+commit 3c50f316af7ab49fb8ecb7eeae953a432e108bee
+Author: troubadoour <trobador@riseup.net>
+Date:   Sat Jun 28 08:59:56 2014 +0000
+
+    use of generic_gui_message
+
+commit 800a2a31cfc7bd99da81276667168af1217870a0
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Jun 24 15:45:13 2014 +0000
+
+    added debian epoch; added dotglob
+
+commit dfbaa644b80a589fb2d079d25c4efb443d66debe
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Jun 3 18:27:34 2014 +0000
+
+    readme
+
+commit ef6b8d17f3da1886395dfde1114067ef4e2fcd0b
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Jun 2 14:37:51 2014 +0000
+
+    packaging
+
+commit f502b871c3d1756d027ac05f3d54ec59f16296c8
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Jun 1 15:38:34 2014 +0000
+
+    readme
+
+commit 18772d9e6185e94b88803e427704e135addeb902
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat May 31 14:37:42 2014 +0000
+
+    # On branch master
+    nothing to commit (working directory clean)
+
+commit 9b841ccbfb1d907b7c167562dc44616400a13bd9
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue May 20 01:53:36 2014 +0000
+
+    updated package description, use x-www-browser, set OPEN_LINK_CONFIRMATION environment variable
+
+commit 8a81738dd329e5afdcc6b3bc128c800cae3612f6
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue May 20 01:04:45 2014 +0000
+
+    outsourced from Whonix main source code https://github.com/Whonix/Whonix

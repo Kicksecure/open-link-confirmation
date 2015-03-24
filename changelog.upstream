@@ -1,3 +1,15 @@
+commit 0a53a39cc6d9dc1ac6d40b87de8dc88099f9bf8b
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Mar 24 17:26:41 2015 +0000
+
+    updated makefile generic to version 1.4
+
+commit d761462b8992711c757fcfee1b21f84a9aa8a9f7
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Wed Feb 4 00:56:27 2015 +0000
+
+    bumped changelog version
+
 commit d886c47d799c56c1900464526a850566438c3cb9
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Feb 4 00:44:56 2015 +0000

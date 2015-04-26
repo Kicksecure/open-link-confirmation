@@ -10,7 +10,7 @@ Build-Depends: debhelper (>= 9), faketime, genmkfile
 Homepage: https://github.com/Whonix/open-link-confirmation
 Vcs-Browser: https://github.com/Whonix/open-link-confirmation
 Vcs-Git: https://github.com/Whonix/open-link-confirmation.git
-Standards-Version: 3.9.4
+Standards-Version: 3.9.6
 
 Package: open-link-confirmation
 Architecture: all

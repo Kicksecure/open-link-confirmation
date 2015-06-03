@@ -1,3 +1,9 @@
+open-link-confirmation (3:1.0-1) unstable; urgency=low
+
+  * New upstream version (local package).
+
+ -- Patrick Schleizer <adrelanos@riseup.net>  Wed, 03 Jun 2015 15:00:03 +0000
+
 open-link-confirmation (3:0.9-1) unstable; urgency=low
 
   * New upstream version (local package).

@@ -74,8 +74,14 @@ main_function() {
       else
          local icon="error"
          local title="Link Confirm Open ERROR"
-         local msg="<p>Link Confirm Open does not support opening links on Gateway for security reasons.</p>
+         if command -v qubesdb-read >/dev/null 2>&1 ; then
+            local msg="<p>Link Confirm Open does not support opening links on Gateway for security reasons.</p>
+<p>Please copy the link to the Workstation and open it there.</p>
 <p>Use Tor Browser under Workstation to browse the internet.</p>"
+         else
+            local msg="<p>Link Confirm Open does not support opening links on Gateway for security reasons.</p>
+<p>Use Tor Browser under Workstation to browse the internet.</p>"
+         fi
          local question=""
          local button="ok"
          /usr/lib/msgcollector/generic_gui_message "error" "$title" "$msg" "$question" "$button"

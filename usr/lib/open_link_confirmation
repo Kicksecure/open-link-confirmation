@@ -10,8 +10,8 @@ main_function() {
    ## Used by tb-starter.
    export OPEN_LINK_CONFIRMATION="true"
 
+   shopt -s nullglob
    local i
-
    for i in /etc/open_link_confirm.d/*.conf; do
       ## TODO
       bash -n "$i" || exit 1

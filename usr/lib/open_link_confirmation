@@ -23,7 +23,10 @@ main_function() {
       local is_file="0"
    fi
 
-   if [[ -f "${1+"$@"}" ]]; then
+   local input_object_original
+   input_object_original="$@"
+
+   if [ -f "$input_object_original" ]; then
       local is_file="1"
    else
       local is_file="0"
@@ -52,11 +55,11 @@ main_function() {
       if [ "$is_file" = "1" ]; then
          ## We could easily change our mind and ask for confirmation.
          local title="Link Confirm Open"
-         #local msg="${1+"$@"} will be opened in $open_in_tool_bin_name. Continue?"
+         #local msg="$input_object_original will be opened in $open_in_tool_bin_name. Continue?"
 
          local open_in_tool_exit_code
          open_in_tool_exit_code="0"
-         $open_in_tool_bin $open_in_tool_extra_opts ${1+"$@"} >/dev/null 2>/dev/null || { open_in_tool_exit_code="$?" ; true; };
+         $open_in_tool_bin $open_in_tool_extra_opts "$input_object_original" >/dev/null 2>/dev/null || { open_in_tool_exit_code="$?" ; true; };
          exit "$open_in_tool_exit_code"
       else
          local icon="error"
@@ -89,18 +92,17 @@ main_function() {
 
       local trim="128"
 
-      local temp
-      temp="${1+"$@"}"
+      local input_object_string_length
+      input_object_string_length="${#input_object_original}"
 
-      local temp_string_length
-      temp_string_length="${#temp}"
+      ## Trim input_object_original to 128 characters.
+      local input_object_trimmed
+      input_object_trimmed="${input_object_original:0:$trim}"
 
-      ## Trim temp to 128 characters.
-      temp="${temp:0:$trim}"
+      local input_object_stripped_and_trimmed
+      input_object_stripped_and_trimmed="$(/usr/lib/msgcollector/striphtml "$input_object_trimmed")"
 
-      temp="$(/usr/lib/msgcollector/striphtml "$temp")"
-
-      if [ "$temp_string_length" -gt "$trim" ]; then
+      if [ "$input_object_string_length" -gt "$trim" ]; then
          local extra_long_link="<p><b>Note</b>: The address is too long, so only the first <u>$trim</u> characters are shown.</p>"
       fi
 
@@ -114,16 +116,16 @@ main_function() {
          local icon="error"
          local title="Link Confirm Open ERROR"
          local msg="<p>The following <b>$type</b> cannot be opened in <u>$open_in_tool_bin_name</u>, because no browser is installed, that supports open-link-confirmation.</p>
-<p><code><blockquote>$temp$extra_long_link</blockquote></code></p>"
+<p><code><blockquote>$input_object_stripped_and_trimmed$extra_long_link</blockquote></code></p>"
          local question=""
          local button="ok"
          /usr/lib/msgcollector/generic_gui_message "error" "$title" "$msg" "$question" "$button"
          exit 0
-      elif [ "$temp" = "" ] || [ "$temp" = " " ]; then
+      elif [ "$input_object_stripped_and_trimmed" = "" ] || [ "$input_object_stripped_and_trimmed" = " " ]; then
          local icon="warning"
          local title="Confirm Open"
          local msg="<p>Be careful if <b>$open_in_tool_bin_name</b> is already running as your activities might get linked.</p>
-<p>$temp$extra_long_link</p>"
+<p>$input_object_stripped_and_trimmed$extra_long_link</p>"
          local question="Do you want to open <b>$open_in_tool_bin_name</b>?"
          local button="yesno"
       else
@@ -131,7 +133,7 @@ main_function() {
          local title="Confirm Open"
          local msg="<p>The following <b>$type</b> will be opened in <u>$open_in_tool_bin_name</u>.</p>
 <p>Be careful if <u>$open_in_tool_bin_name</u> is already running as your activities might get linked.</p>
-<p><code><blockquote>$temp$extra_long_link</blockquote></code></p>"
+<p><code><blockquote>$input_object_stripped_and_trimmed$extra_long_link</blockquote></code></p>"
          local question="Continue?"
          local button="yesno"
       fi
@@ -177,7 +179,7 @@ main_function() {
 
    local open_in_tool_exit_code
    open_in_tool_exit_code="0"
-   $open_in_tool_bin $open_in_tool_extra_opts ${1+"$@"} >/dev/null 2>/dev/null || { open_in_tool_exit_code="$?" ; true; };
+   $open_in_tool_bin $open_in_tool_extra_opts "$input_object_stripped_and_trimmed" >/dev/null 2>/dev/null || { open_in_tool_exit_code="$?" ; true; };
 
    if [ ! "$open_in_tool_exit_code" = "0" ]; then
       local msg="<p><b><u>ERROR</b></u>: <b>$open_in_tool_bin</b> returned <u>$open_in_tool_exit_code</u>! Please report this bug!</p>"
@@ -187,4 +189,4 @@ main_function() {
    exit "$open_in_tool_exit_code"
 }
 
-main_function "${1+"$@"}"
+main_function "$@"

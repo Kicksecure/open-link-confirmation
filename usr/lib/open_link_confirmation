@@ -183,6 +183,8 @@ main_function() {
 
    if [ ! "$open_in_tool_exit_code" = "0" ]; then
       local msg="<p><b><u>ERROR</b></u>: <b>$open_in_tool_bin</b> returned <u>$open_in_tool_exit_code</u>! Please report this bug!</p>"
+      local question=""
+      local button="ok"
       /usr/lib/msgcollector/generic_gui_message "error" "$title" "$msg" "$question" "$button"
    fi
 

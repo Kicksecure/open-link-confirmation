@@ -26,10 +26,28 @@ main_function() {
    local input_object_original
    input_object_original="$@"
 
+   local trim="128"
+
+   local input_object_string_length
+   input_object_string_length="${#input_object_original}"
+
+   ## Trim input_object_original to 128 characters.
+   local input_object_trimmed
+   input_object_trimmed="${input_object_original:0:$trim}"
+
+   local input_object_stripped_and_trimmed
+   input_object_stripped_and_trimmed="$(/usr/lib/msgcollector/striphtml "$input_object_trimmed")"
+
+   if [ "$input_object_string_length" -gt "$trim" ]; then
+      local extra_long_link="<p><b>Note</b>: The address is too long, so only the first <u>$trim</u> characters are shown.</p>"
+   fi
+
    if [ -f "$input_object_original" ]; then
       local is_file="1"
+      local type="file"
    else
       local is_file="0"
+      local type="link"
    fi
 
    ## For simulating a Gateway, comment in the next line and comment out the over next one.
@@ -65,9 +83,50 @@ main_function() {
          local icon="error"
          local title="Link Confirm Open ERROR"
          if command -v qubesdb-read >/dev/null 2>&1 ; then
-            local msg="<p>Link Confirm Open does not support opening links on Gateway for security reasons.</p>
+            vm_name="$(qubesdb-read /name)"
+            [ -n "$link_confirmation_target_vm" ] || link_confirmation_target_vm="anon-whonix"
+            [ -n "$link_confirmation_vm_open_tool" ] || link_confirmation_vm_open_tool="qvm-open-in-vm"
+            if [ "$vm_name" = "$link_confirmation_target_vm" ]; then
+               local msg="<p>Link Confirm Open does not support opening links on Gateway for security reasons.</p>
 <p>Please copy the link to the Workstation and open it there.</p>
-<p>Use Tor Browser under Workstation to browse the internet.</p>"
+<p>Use Tor Browser under Workstation to browse the internet.</p>
+<p>(Do not set <code>link_confirmation_target_vm</code> to <code>$vm_name</code>!)"
+            elif [ "$link_confirmation_target_vm" = "none" ]; then
+               local msg="<p>Link Confirm Open does not support opening links on Gateway for security reasons.</p>
+<p>Please copy the link to the Workstation and open it there.</p>
+<p>Use Tor Browser under Workstation to browse the internet.</p>
+<p>(Or set <code>link_confirmation_target_vm</code> to some other VM than <code>none</code>.)"
+            else
+               local link_confirmation_vm_open_tool_exit_code
+               link_confirmation_vm_open_tool_exit_code="0"
+               link_confirmation_vm_open_tool_output="$($link_confirmation_vm_open_tool "$link_confirmation_target_vm" "$input_object_original" 2>&1)" \
+                  || { link_confirmation_vm_open_tool_exit_code="$?" ; true; };
+               if [ "$link_confirmation_vm_open_tool_exit_code" = "0" ]; then
+                  exit 0
+               else
+                  if [ "$link_confirmation_vm_open_tool_output" = "Request refused" ]; then
+                     exit 0
+                  fi
+                  local msg="\
+<p>The following <u>$type</u> could not be opened.</p>
+
+<p><code><blockquote>$input_object_stripped_and_trimmed$extra_long_link</blockquote></code></p>
+
+<p>Link Confirm Open does not support opening links on Gateway for security reasons.</p>
+<p>Please copy the link to the Workstation and open it there.</p>
+<p>Use Tor Browser under Workstation to browse the internet.</p>
+
+<p>Advanced users information:
+<br></br>You could also set variable <code>link_confirmation_target_vm</code> in configuration folder <code>/etc/open_link_confirm.d</code> to an existing VM.</p>
+
+<p>Debugging information:
+<br></br>link_confirmation_vm_open_tool: <code>$link_confirmation_vm_open_tool</code>
+<br></br>link_confirmation_target_vm: <code>$link_confirmation_target_vm</code>
+<br></br>input_object_stripped_and_trimmed: <code>$input_object_stripped_and_trimmed</code>
+<br></br>link_confirmation_vm_open_tool_output: <code>$link_confirmation_vm_open_tool_output</code>
+<br></br>link_confirmation_vm_open_tool_exit_code: <u>$link_confirmation_vm_open_tool_exit_code</u></p>"
+               fi
+            fi
          else
             local msg="<p>Link Confirm Open does not support opening links on Gateway for security reasons.</p>
 <p>Use Tor Browser under Workstation to browse the internet.</p>"
@@ -88,28 +147,6 @@ main_function() {
       ## Prettier name in default case.
       if [ "$open_in_tool_bin_name" = "x-www-browser (/usr/bin/torbrowser)" ]; then
          open_in_tool_bin_name="Tor Browser"
-      fi
-
-      local trim="128"
-
-      local input_object_string_length
-      input_object_string_length="${#input_object_original}"
-
-      ## Trim input_object_original to 128 characters.
-      local input_object_trimmed
-      input_object_trimmed="${input_object_original:0:$trim}"
-
-      local input_object_stripped_and_trimmed
-      input_object_stripped_and_trimmed="$(/usr/lib/msgcollector/striphtml "$input_object_trimmed")"
-
-      if [ "$input_object_string_length" -gt "$trim" ]; then
-         local extra_long_link="<p><b>Note</b>: The address is too long, so only the first <u>$trim</u> characters are shown.</p>"
-      fi
-
-      if [ "$is_file" = "1" ]; then
-         local type="file"
-      else
-         local type="link"
       fi
 
       if [ "$open_in_tool_bin_name_readlink" = "$BASH_SOURCE" ]; then

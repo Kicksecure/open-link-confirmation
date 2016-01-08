@@ -142,7 +142,7 @@ main_function() {
       local open_in_tool_bin="x-www-browser"
       local open_in_tool_bin_name_readlink="$(readlink -f "/usr/bin/x-www-browser")"
       local open_in_tool_bin_name="x-www-browser ($open_in_tool_bin_name_readlink)"
-      local open_in_tool_extra_opts="--new-tab"
+      #local open_in_tool_extra_opts="--new-tab"
 
       ## Prettier name in default case.
       if [ "$open_in_tool_bin_name" = "x-www-browser (/usr/bin/torbrowser)" ]; then
@@ -216,7 +216,7 @@ main_function() {
 
    local open_in_tool_exit_code
    open_in_tool_exit_code="0"
-   $open_in_tool_bin $open_in_tool_extra_opts "$input_object_stripped_and_trimmed" >/dev/null 2>/dev/null || { open_in_tool_exit_code="$?" ; true; };
+   $open_in_tool_bin $open_in_tool_extra_opts "$@" >/dev/null 2>/dev/null || { open_in_tool_exit_code="$?" ; true; };
 
    if [ ! "$open_in_tool_exit_code" = "0" ]; then
       local msg="<p><b><u>ERROR</b></u>: <b>$open_in_tool_bin</b> returned <u>$open_in_tool_exit_code</u>! Please report this bug!</p>"

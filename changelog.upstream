@@ -1,3 +1,54 @@
+commit 425049baba883655124b0462c7a14bb47235b60e
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Jan 8 15:35:08 2016 +0000
+
+    better use "$@" for better compatibility;
+    no more need to add --new-tab
+    
+    http://forums.whonix.org/t/torbrowser-script-bug/1893/1
+
+commit 7dc3af9002b1b6ccbb54b837b6901f5d14d0a28c
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat Dec 12 00:42:51 2015 +0000
+
+    open links from Qubes-Whonix-Gateway inside a Qubes-Whonix-Workstation
+    
+    https://phabricator.whonix.org/T452
+
+commit 4c040202918bba228a3c663b6b2be8e5af0249cc
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Dec 11 23:06:31 2015 +0000
+
+    improved output in case of errors
+
+commit 6e1cd8f63b4d259a68fe1dab4519757144c26080
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Dec 11 23:04:31 2015 +0000
+
+    refactoring, better variable names, use "$@" instead of "${1+"$@"}"
+
+commit 2e2e58be05f7fbb8e9164a066c584c688e381909
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Dec 1 21:32:31 2015 +0000
+
+    fixed config file parser if config folder does not exist
+
+commit 0b6c0f212df08fb4fae06c86cc0abbab6abfdbb5
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Nov 30 19:42:28 2015 +0000
+
+    Only source configuration files that end with the '.conf' extension.
+    
+    Thanks to @nrgaway for the suggestion!
+    
+    https://phabricator.whonix.org/T286
+
+commit cd02ba192b0c3a97721fc3695ccfe57fa2779818
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Aug 25 14:08:13 2015 +0000
+
+    bumped changelog version
+
 commit e1475f833e09ad6a5770e4b55ca18844b9447e44
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Mon Aug 24 17:47:23 2015 +0000

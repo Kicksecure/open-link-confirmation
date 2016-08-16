@@ -4,12 +4,12 @@
 ## Copyright (C) 2012 - 2014 Patrick Schleizer <adrelanos@riseup.net>
 ## See the file COPYING for copying conditions.
 
-#set -x
+set -x
 
-main_function() {
-   ## Used by tb-starter.
-   export OPEN_LINK_CONFIRMATION="true"
+## TODO
+set -e
 
+source_config() {
    shopt -s nullglob
    local i
    for i in /etc/open_link_confirm.d/*.conf /rw/config/open_link_confirm.d/*.conf; do
@@ -17,97 +17,129 @@ main_function() {
       bash -n "$i" || exit 1
       source "$i"
    done
+}
+
+preparation() {
+   ## Used by tb-starter.
+   export OPEN_LINK_CONFIRMATION="true"
 
    if [ "$#" = "0" ]; then
       ## Zero arguments.
-      local is_file="0"
+      is_file="0"
    fi
 
-   local input_object_original
    input_object_original="$@"
 
-   local trim="128"
+   trim="128"
 
-   local input_object_string_length
    input_object_string_length="${#input_object_original}"
 
    ## Trim input_object_original to 128 characters.
-   local input_object_trimmed
    input_object_trimmed="${input_object_original:0:$trim}"
 
-   local input_object_stripped_and_trimmed
    input_object_stripped_and_trimmed="$(/usr/lib/msgcollector/striphtml "$input_object_trimmed")"
 
    if [ "$input_object_string_length" -gt "$trim" ]; then
-      local extra_long_link="<p><b>Note</b>: The address is too long, so only the first <u>$trim</u> characters are shown.</p>"
+      extra_long_link="<p><b>Note</b>: The address is too long, so only the first <u>$trim</u> characters are shown.</p>"
    fi
 
    if [ -f "$input_object_original" ]; then
-      local is_file="1"
-      local type="file"
+      is_file="1"
+      type="file"
    else
-      local is_file="0"
-      local type="link"
+      is_file="0"
+      type="link"
+   fi
+}
+
+gateway() {
+   if [ ! "$EDITOR" = "" ]; then
+      open_in_tool_bin="$EDITOR"
+      open_in_tool_bin_name="\$EDITOR $EDITOR"
+   ## What other useful condition could we check to determine the default editor?
+   #elif [ "1" = "2" ]; then
+      #open_in_tool_bin="?"
+      #open_in_tool_bin_name="?"
+   else
+      open_in_tool_bin="kwrite"
+      open_in_tool_bin_name="KWrite"
    fi
 
-   ## For simulating a Gateway, comment in the next line and comment out the over next one.
-   #if [ true ]; then
+   open_in_tool_extra_opts=""
 
-   if [ -f "/usr/share/anon-gw-base-files/gateway" ]; then
-      local icon="/usr/share/icons/anon-icon-pack/whonix.ico"
+   if [ "$is_file" = "1" ]; then
+      ## Open files on gateway without confirmation.
 
-      if [ ! "$EDITOR" = "" ]; then
-         local open_in_tool_bin="$EDITOR"
-         local open_in_tool_bin_name="\$EDITOR $EDITOR"
-      ## What other useful condition could we check to determine the default editor?
-      #elif [ "1" = "2" ]; then
-         #local open_in_tool_bin="?"
-         #local open_in_tool_bin_name="?"
-      else
-         local open_in_tool_bin="kwrite"
-         local open_in_tool_bin_name="KWrite"
-      fi
+      ## We could easily change our mind and ask for confirmation.
+      title="Link Confirm Open"
+      #msg="$input_object_original will be opened in $open_in_tool_bin_name. Continue?"
 
-      local open_in_tool_extra_opts=""
+      open_in_tool_exit_code="0"
+      $open_in_tool_bin $open_in_tool_extra_opts "$input_object_original" >/dev/null 2>/dev/null || { open_in_tool_exit_code="$?" ; true; };
+      exit "$open_in_tool_exit_code"
+   fi
 
-      if [ "$is_file" = "1" ]; then
-         ## We could easily change our mind and ask for confirmation.
-         local title="Link Confirm Open"
-         #local msg="$input_object_original will be opened in $open_in_tool_bin_name. Continue?"
+   if command -v qubesdb-read >/dev/null 2>&1 ; then
+      qubes_redirect_maybe
+      return 0
+   fi
 
-         local open_in_tool_exit_code
-         open_in_tool_exit_code="0"
-         $open_in_tool_bin $open_in_tool_extra_opts "$input_object_original" >/dev/null 2>/dev/null || { open_in_tool_exit_code="$?" ; true; };
-         exit "$open_in_tool_exit_code"
-      else
-         local icon="error"
-         local title="Link Confirm Open ERROR"
-         if command -v qubesdb-read >/dev/null 2>&1 ; then
-            vm_name="$(qubesdb-read /name)"
-            [ -n "$link_confirmation_target_vm" ] || link_confirmation_target_vm="anon-whonix"
-            [ -n "$link_confirmation_vm_open_tool" ] || link_confirmation_vm_open_tool="qvm-open-in-vm"
-            if [ "$vm_name" = "$link_confirmation_target_vm" ]; then
-               local msg="<p>Link Confirm Open does not support opening links on Gateway for security reasons.</p>
-<p>Please copy the link to the Workstation and open it there.</p>
-<p>Use Tor Browser under Workstation to browse the internet.</p>
-<p>(Do not set <code>link_confirmation_target_vm</code> to <code>$vm_name</code>!)"
-            elif [ "$link_confirmation_target_vm" = "none" ]; then
-               local msg="<p>Link Confirm Open does not support opening links on Gateway for security reasons.</p>
+   title="Link Confirm Open ERROR"
+   msg="<p>Link Confirm Open does not support opening links on Gateway for security reasons.</p>
+<p>Use Tor Browser under Workstation to browse the internet.</p>"
+   question=""
+   button="ok"
+   /usr/lib/msgcollector/generic_gui_message "error" "$title" "$msg" "$question" "$button"
+   exit 0
+}
+
+qubes_redirect_maybe() {
+   vm_name="$(qubesdb-read /name)"
+
+   [ -n "$link_confirmation_target_vm" ] || link_confirmation_target_vm="anon-whonix"
+   [ -n "$link_confirmation_vm_open_tool" ] || link_confirmation_vm_open_tool="qvm-open-in-vm"
+
+   if [ "$link_confirmation_target_vm" = "none" ]; then
+      title="Link Confirm Open ERROR"
+      question=""
+      button="ok"
+      msg="<p>Link Confirm Open does not support opening links on Gateway for security reasons.</p>
 <p>Please copy the link to the Workstation and open it there.</p>
 <p>Use Tor Browser under Workstation to browse the internet.</p>
 <p>(Or set <code>link_confirmation_target_vm</code> to some other VM than <code>none</code>.)"
-            else
-               local link_confirmation_vm_open_tool_exit_code
-               link_confirmation_vm_open_tool_exit_code="0"
-               link_confirmation_vm_open_tool_output="$($link_confirmation_vm_open_tool "$link_confirmation_target_vm" "$input_object_original" 2>&1)" \
-                  || { link_confirmation_vm_open_tool_exit_code="$?" ; true; };
-               if [ "$link_confirmation_vm_open_tool_exit_code" = "0" ]; then
-                  exit 0
-               else
-                  if [ "$link_confirmation_vm_open_tool_output" = "Request refused" ]; then
-                     exit 0
-                  fi
-                  local msg="\
+      /usr/lib/msgcollector/generic_gui_message "error" "$title" "$msg" "$question" "$button"
+      exit 1
+   fi
+
+   if [ "$vm_name" = "$link_confirmation_target_vm" ]; then
+      title="Link Confirm Open ERROR"
+      question=""
+      button="ok"
+      msg="<p>Link Confirm Open does not support opening links on Gateway for security reasons.</p>
+<p>Please copy the link to the Workstation and open it there.</p>
+<p>Use Tor Browser under Workstation to browse the internet.</p>
+<p>(Do not set <code>link_confirmation_target_vm</code> to <code>$vm_name</code>!)"
+      /usr/lib/msgcollector/generic_gui_message "error" "$title" "$msg" "$question" "$button"
+      exit 1
+   fi
+
+   link_confirmation_vm_open_tool_exit_code="0"
+   link_confirmation_vm_open_tool_output="$($link_confirmation_vm_open_tool "$link_confirmation_target_vm" "$input_object_original" 2>&1)" \
+      || { link_confirmation_vm_open_tool_exit_code="$?" ; true; };
+
+   if [ "$link_confirmation_vm_open_tool_exit_code" = "0" ]; then
+      exit 0
+   fi
+
+   if [ "$link_confirmation_vm_open_tool_output" = "Request refused" ]; then
+      ## Qubes 'no' clicked.
+      exit 0
+   fi
+
+   title="Link Confirm Open ERROR"
+   question=""
+   button="ok"
+   msg="\
 <p>The following <u>$type</u> could not be opened.</p>
 
 <p><code><blockquote>$input_object_stripped_and_trimmed$extra_long_link</blockquote></code></p>
@@ -125,60 +157,50 @@ main_function() {
 <br></br>input_object_stripped_and_trimmed: <code>$input_object_stripped_and_trimmed</code>
 <br></br>link_confirmation_vm_open_tool_output: <code>$link_confirmation_vm_open_tool_output</code>
 <br></br>link_confirmation_vm_open_tool_exit_code: <u>$link_confirmation_vm_open_tool_exit_code</u></p>"
-               fi
-            fi
-         else
-            local msg="<p>Link Confirm Open does not support opening links on Gateway for security reasons.</p>
-<p>Use Tor Browser under Workstation to browse the internet.</p>"
-         fi
-         local question=""
-         local button="ok"
-         /usr/lib/msgcollector/generic_gui_message "error" "$title" "$msg" "$question" "$button"
-         exit 0
-      fi
+   /usr/lib/msgcollector/generic_gui_message "error" "$title" "$msg" "$question" "$button"
+   exit 1
+}
 
-   else
-      local icon="/usr/share/icons/anon-icon-pack/whonix.ico"
-      local open_in_tool_bin="x-www-browser"
-      local open_in_tool_bin_name_readlink="$(readlink -f "/usr/bin/x-www-browser")"
-      local open_in_tool_bin_name="x-www-browser ($open_in_tool_bin_name_readlink)"
-      #local open_in_tool_extra_opts="--new-tab"
+workstation() {
+   open_in_tool_bin="x-www-browser"
+   open_in_tool_bin_name_readlink="$(readlink -f "/usr/bin/x-www-browser")"
+   open_in_tool_bin_name="x-www-browser ($open_in_tool_bin_name_readlink)"
+   #open_in_tool_extra_opts="--new-tab"
 
-      ## Prettier name in default case.
-      if [ "$open_in_tool_bin_name" = "x-www-browser (/usr/bin/torbrowser)" ]; then
-         open_in_tool_bin_name="Tor Browser"
-      fi
-
-      if [ "$open_in_tool_bin_name_readlink" = "$BASH_SOURCE" ]; then
-         local icon="error"
-         local title="Link Confirm Open ERROR"
-         local msg="<p>The following <b>$type</b> cannot be opened in <u>$open_in_tool_bin_name</u>, because no browser is installed, that supports open-link-confirmation.</p>
-<p><code><blockquote>$input_object_stripped_and_trimmed$extra_long_link</blockquote></code></p>"
-         local question=""
-         local button="ok"
-         /usr/lib/msgcollector/generic_gui_message "error" "$title" "$msg" "$question" "$button"
-         exit 0
-      elif [ "$input_object_stripped_and_trimmed" = "" ] || [ "$input_object_stripped_and_trimmed" = " " ]; then
-         local icon="warning"
-         local title="Confirm Open"
-         local msg="<p>Be careful if <b>$open_in_tool_bin_name</b> is already running as your activities might get linked.</p>
-<p>$input_object_stripped_and_trimmed$extra_long_link</p>"
-         local question="Do you want to open <b>$open_in_tool_bin_name</b>?"
-         local button="yesno"
-      else
-         local icon="warning"
-         local title="Confirm Open"
-         local msg="<p>The following <b>$type</b> will be opened in <u>$open_in_tool_bin_name</u>.</p>
-<p>Be careful if <u>$open_in_tool_bin_name</u> is already running as your activities might get linked.</p>
-<p><code><blockquote>$input_object_stripped_and_trimmed$extra_long_link</blockquote></code></p>"
-         local question="Continue?"
-         local button="yesno"
-      fi
+   ## Prettier name in default case.
+   if [ "$open_in_tool_bin_name" = "x-www-browser (/usr/bin/torbrowser)" ]; then
+      open_in_tool_bin_name="Tor Browser"
    fi
 
-   local answer
-   answer="0"
+   if [ "$open_in_tool_bin_name_readlink" = "$BASH_SOURCE" ]; then
+      title="Link Confirm Open ERROR"
+      msg="<p>The following <b>$type</b> cannot be opened in <u>$open_in_tool_bin_name</u>, because no browser is installed, that supports open-link-confirmation.</p>
+<p><code><blockquote>$input_object_stripped_and_trimmed$extra_long_link</blockquote></code></p>"
+      question=""
+      button="ok"
+      /usr/lib/msgcollector/generic_gui_message "error" "$title" "$msg" "$question" "$button"
+      exit 0
+   fi
 
+   if [ "$input_object_stripped_and_trimmed" = "" ] || [ "$input_object_stripped_and_trimmed" = " " ]; then
+      title="Confirm Open"
+      msg="<p>Be careful if <b>$open_in_tool_bin_name</b> is already running as your activities might get linked.</p>
+<p>$input_object_stripped_and_trimmed$extra_long_link</p>"
+      question="Do you want to open <b>$open_in_tool_bin_name</b>?"
+      button="yesno"
+      return 0
+   fi
+
+   title="Confirm Open"
+   msg="<p>The following <b>$type</b> will be opened in <u>$open_in_tool_bin_name</u>.</p>
+<p>Be careful if <u>$open_in_tool_bin_name</u> is already running as your activities might get linked.</p>
+<p><code><blockquote>$input_object_stripped_and_trimmed$extra_long_link</blockquote></code></p>"
+   question="Continue?"
+   button="yesno"
+   return 0
+}
+
+final() {
    local ask_for_confirmation="1"
    if [ "$is_file" = "1" ]; then
       ## Got a File.
@@ -197,18 +219,17 @@ main_function() {
    fi
 
    if [ "$ask_for_confirmation" = "1" ]; then
+      local answer
+      answer="0"
       answer="$(/usr/lib/msgcollector/generic_gui_message "warning" "$title" "$msg" "$question" "$button")"
+      if [ ! "$answer" = "16384" ]; then ## Button 'Yes' has not been pressed.
+         exit 0
+      fi
    fi
 
-   if [ ! "$answer" = "16384" ]; then ## Button 'Yes' has not been pressed.
-      exit 0
-   fi
-
-   local command_v_exit_code
-   command_v_exit_code="0"
-   command -v $open_in_tool_bin >/dev/null 2>/dev/null || { command_v_exit_code="$?" ; true; };
-
-   if [ ! "$command_v_exit_code" = "0" ]; then
+   if ! command -v $open_in_tool_bin >/dev/null 2>/dev/null ; then
+      local question=""
+      local button="ok"
       local msg="<p><b><u>ERROR</b></u>: <b>$open_in_tool_bin</b> does not exist! Please report this bug!</p>"
       /usr/lib/msgcollector/generic_gui_message "error" "$title" "$msg" "$question" "$button"
       exit 1
@@ -219,13 +240,28 @@ main_function() {
    $open_in_tool_bin $open_in_tool_extra_opts "$@" >/dev/null 2>/dev/null || { open_in_tool_exit_code="$?" ; true; };
 
    if [ ! "$open_in_tool_exit_code" = "0" ]; then
-      local msg="<p><b><u>ERROR</b></u>: <b>$open_in_tool_bin</b> returned <u>$open_in_tool_exit_code</u>! Please report this bug!</p>"
       local question=""
       local button="ok"
+      local msg="<p><b><u>ERROR</b></u>: <b>$open_in_tool_bin</b> returned <u>$open_in_tool_exit_code</u>! Please report this bug!</p>"
       /usr/lib/msgcollector/generic_gui_message "error" "$title" "$msg" "$question" "$button"
    fi
 
    exit "$open_in_tool_exit_code"
+}
+
+main_function() {
+   source_config "$@"
+   preparation "$@"
+
+   if [ -f "/var/run/qubes/this-is-templatevm" ]; then
+      qubes_redirect_maybe
+   elif [ -f "/usr/share/anon-gw-base-files/gateway" ]; then
+      gateway "$@"
+   else
+      workstation "$@"
+   fi
+
+   final "$@"
 }
 
 main_function "$@"

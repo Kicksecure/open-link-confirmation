@@ -1,3 +1,29 @@
+commit 98e806c25a7b793b69935517d3a6eeb54520114a
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Nov 21 17:42:17 2016 +0000
+
+    readme
+
+commit 3540891b24ed227ca6e5d9b967170c3fa86ea574
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Aug 16 22:35:16 2016 +0000
+
+    redirect opening links from whonix-gw / whonix-ws TemplateVM to anon-whonix
+    
+    refactoring
+
+commit 22b4993750034de6d59c861c0488c4db543c7654
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Wed Jun 15 22:02:12 2016 +0000
+
+    also source /rw/config/open_link_confirm.d/*.conf for config snippets
+
+commit a2e8c251f9b935b1d700d854fcd2326e5d84da46
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Apr 7 22:54:39 2016 +0000
+
+    bumped changelog version
+
 commit 425049baba883655124b0462c7a14bb47235b60e
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Fri Jan 8 15:35:08 2016 +0000

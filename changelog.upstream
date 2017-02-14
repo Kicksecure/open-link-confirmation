@@ -63,7 +63,7 @@ commit 6e1cd8f63b4d259a68fe1dab4519757144c26080
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Fri Dec 11 23:04:31 2015 +0000
 
-    refactoring, better variable names, use "$@" instead of "${1+"$@"}"
+    refactoring, better variable names, use "$@" instead of ""$@""
 
 commit 2e2e58be05f7fbb8e9164a066c584c688e381909
 Author: Patrick Schleizer <adrelanos@riseup.net>

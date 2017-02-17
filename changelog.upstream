@@ -1,3 +1,37 @@
+commit 81486bef608141bcc5dd33bf731e927ecb94ff08
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Wed Feb 15 20:46:18 2017 +0000
+
+    Debian stretch / kde plasma5 fix: KDEDIRS -> XDG_CONFIG_DIRS
+    
+    https://phabricator.whonix.org/T633
+
+commit 4ecf5d4e0867c6f23dbdff9895aab94461f6ca8b
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Feb 14 17:30:30 2017 +0000
+
+    "$@"
+
+commit 78f5d3617ac8b8936b219c46a5cf4036f6902a5b
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Feb 10 15:47:51 2017 +0000
+
+    remove faketime from Build-Depends:
+    
+    since no longer used for reproducible builds
+
+commit 15a5275ac07c5510cbd50029df5f920df76b9759
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Feb 10 15:35:25 2017 +0000
+
+    remove debian/gain-root-command workaround
+
+commit 76a1dd22d0374d0a8e3210da47a34495e8aded21
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Jan 15 15:33:32 2017 +0000
+
+    bumped changelog version
+
 commit 71f357703d38f48b0c151c3d7887a861f295c0ea
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Sun Jan 15 08:35:37 2017 +0100
@@ -63,7 +97,7 @@ commit 6e1cd8f63b4d259a68fe1dab4519757144c26080
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Fri Dec 11 23:04:31 2015 +0000
 
-    refactoring, better variable names, use "$@" instead of ""$@""
+    refactoring, better variable names, use "$@" instead of "${1+"$@"}"
 
 commit 2e2e58be05f7fbb8e9164a066c584c688e381909
 Author: Patrick Schleizer <adrelanos@riseup.net>

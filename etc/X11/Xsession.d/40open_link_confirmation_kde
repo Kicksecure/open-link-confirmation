@@ -5,7 +5,6 @@
 ## See the file COPYING for copying conditions.
 
 if [ -z "$XDG_CONFIG_DIRS" ]; then
-   export XDG_CONFIG_DIRS=/usr/share/open-link-confirmation/
-else
-   export XDG_CONFIG_DIRS=/usr/share/open-link-confirmation/:$XDG_CONFIG_DIRS
+   XDG_CONFIG_DIRS=/etc/xdg
 fi
+export XDG_CONFIG_DIRS=/usr/share/open-link-confirmation/:$XDG_CONFIG_DIRS

@@ -49,6 +49,11 @@ preparation() {
       is_file="0"
       type="link"
    fi
+
+   if command -v qubesdb-read >/dev/null 2>&1 ; then
+      qubes_detected=true
+      qubes_type="$(qubesdb-read /type)"
+   fi
 }
 
 gateway() {
@@ -78,7 +83,7 @@ gateway() {
       exit "$open_in_tool_exit_code"
    fi
 
-   if command -v qubesdb-read >/dev/null 2>&1 ; then
+   if [ "$qubes_detected" = "true" ] ; then
       qubes_redirect_maybe
       return 0
    fi
@@ -214,6 +219,18 @@ final() {
          local ask_for_confirmation="0"
       else
          local ask_for_confirmation="1"
+      fi
+   fi
+
+   ## On first invocation in Qubes DispVM, skip asking for confirmation.
+   ## https://github.com/QubesOS/qubes-issues/issues/4113
+   if [ "$qubes_type" = "DispVM" ]; then
+      if [ -f ~/.open-link-confirmation ]; then
+         true "~/.open-link-confirmation already exists. Leaving variable ask_for_confirmation as is."
+      else
+         true "~/.open-link-confirmation does not exist yet. Setting ask_for_confirmation=0."
+         local ask_for_confirmation="0"
+         touch ~/.open-link-confirmation
       fi
    fi
 

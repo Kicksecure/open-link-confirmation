@@ -84,7 +84,7 @@ gateway() {
    fi
 
    if [ "$qubes_detected" = "true" ] ; then
-      qubes_redirect_maybe
+      qubes_redirect "$@"
       return 0
    fi
 
@@ -97,38 +97,13 @@ gateway() {
    exit 0
 }
 
-qubes_redirect_maybe() {
+qubes_redirect() {
    vm_name="$(qubesdb-read /name)"
 
-   [ -n "$link_confirmation_target_vm" ] || link_confirmation_target_vm="anon-whonix"
-   [ -n "$link_confirmation_vm_open_tool" ] || link_confirmation_vm_open_tool="qvm-open-in-vm"
-
-   if [ "$link_confirmation_target_vm" = "none" ]; then
-      title="Link Confirm Open ERROR"
-      question=""
-      button="ok"
-      msg="<p>Link Confirm Open does not support opening links on Gateway for security reasons.</p>
-<p>Please copy the link to the Workstation and open it there.</p>
-<p>Use Tor Browser under Workstation to browse the internet.</p>
-<p>(Or set <code>link_confirmation_target_vm</code> to some other VM than <code>none</code>.)"
-      /usr/lib/msgcollector/generic_gui_message "error" "$title" "$msg" "$question" "$button"
-      exit 1
-   fi
-
-   if [ "$vm_name" = "$link_confirmation_target_vm" ]; then
-      title="Link Confirm Open ERROR"
-      question=""
-      button="ok"
-      msg="<p>Link Confirm Open does not support opening links on Gateway for security reasons.</p>
-<p>Please copy the link to the Workstation and open it there.</p>
-<p>Use Tor Browser under Workstation to browse the internet.</p>
-<p>(Do not set <code>link_confirmation_target_vm</code> to <code>$vm_name</code>!)"
-      /usr/lib/msgcollector/generic_gui_message "error" "$title" "$msg" "$question" "$button"
-      exit 1
-   fi
+   [ -n "$link_confirmation_vm_open_tool" ] || link_confirmation_vm_open_tool="qvm-open-in-dvm"
 
    link_confirmation_vm_open_tool_exit_code="0"
-   link_confirmation_vm_open_tool_output="$($link_confirmation_vm_open_tool "$link_confirmation_target_vm" "$input_object_original" 2>&1)" \
+   link_confirmation_vm_open_tool_output="$($link_confirmation_vm_open_tool "$input_object_original" 2>&1)" \
       || { link_confirmation_vm_open_tool_exit_code="$?" ; true; };
 
    if [ "$link_confirmation_vm_open_tool_exit_code" = "0" ]; then
@@ -148,16 +123,11 @@ qubes_redirect_maybe() {
 
 <p><code><blockquote>$input_object_stripped_and_trimmed$extra_long_link</blockquote></code></p>
 
-<p>Link Confirm Open does not support opening links on Gateway for security reasons.</p>
 <p>Please copy the link to the Workstation and open it there.</p>
 <p>Use Tor Browser under Workstation to browse the internet.</p>
 
-<p>Advanced users information:
-<br></br>You could also set variable <code>link_confirmation_target_vm</code> in configuration folder <code>/etc/open_link_confirm.d</code> to an existing VM.</p>
-
 <p>Debugging information:
 <br></br>link_confirmation_vm_open_tool: <code>$link_confirmation_vm_open_tool</code>
-<br></br>link_confirmation_target_vm: <code>$link_confirmation_target_vm</code>
 <br></br>input_object_stripped_and_trimmed: <code>$input_object_stripped_and_trimmed</code>
 <br></br>link_confirmation_vm_open_tool_output: <code>$link_confirmation_vm_open_tool_output</code>
 <br></br>link_confirmation_vm_open_tool_exit_code: <u>$link_confirmation_vm_open_tool_exit_code</u></p>"
@@ -270,7 +240,7 @@ main_function() {
    preparation "$@"
 
    if [ -f "/var/run/qubes/this-is-templatevm" ]; then
-      qubes_redirect_maybe
+      qubes_redirect "$@"
    elif [ -f "/usr/share/anon-gw-base-files/gateway" ]; then
       gateway "$@"
    else

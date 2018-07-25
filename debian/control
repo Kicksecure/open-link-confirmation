@@ -14,7 +14,7 @@ Standards-Version: 3.9.8
 Package: open-link-confirmation
 Architecture: all
 Depends: sensible-utils, anon-icon-pack,
- msgcollector, ${misc:Depends}
+ msgcollector, xdg-utils, ${misc:Depends}
 Recommends: tb-starter, tb-updater, tb-default-browser
 Description: Asks for confirmation before opening links
  Asks before a link is (accidentally) opened in a browser. Links are opened in

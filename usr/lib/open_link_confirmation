@@ -140,13 +140,23 @@ qubes_redirect() {
 workstation() {
    if [ "$is_file" = "1" ]; then
       [ -n "$open_in_tool_bin" ] || open_in_tool_bin="xdg-open"
+
+      if [ "$open_in_tool_bin" = "xdg-open" ]; then
+         ## Qubes sets 'GNOME_DESKTOP_SESSION_ID=c1' therefore `xdg-open`
+         ## detects gnome and sets 'DE=gnome3' which leads to
+         ## `xdg-mime query filetype` output being empty "". Therefore,
+         ## setting 'DE=generic'.
+         xdg_file_type="$(DE=generic xdg-mime query filetype "$input_object_original")" || true
+         xdg_desktop_file="$(DE=generic xdg-mime query default "$xdg_file_type")" || true
+         open_in_tool_bin_name="$xdg_desktop_file"
+      fi
    else
       [ -n "$open_in_tool_bin" ] || open_in_tool_bin="x-www-browser"
       #[ -n "$open_in_tool_extra_opts" ] || open_in_tool_extra_opts="--new-tab"
-   fi
 
-   [ -n "$open_in_tool_bin_name_readlink" ] || open_in_tool_bin_name_readlink="$(readlink -f "$(command -v "$open_in_tool_bin")")"
-   [ -n "$open_in_tool_bin_name" ] || open_in_tool_bin_name="$open_in_tool_bin ($open_in_tool_bin_name_readlink)"
+      [ -n "$open_in_tool_bin_name_readlink" ] || open_in_tool_bin_name_readlink="$(readlink -f "$(command -v "$open_in_tool_bin")")"
+      [ -n "$open_in_tool_bin_name" ] || open_in_tool_bin_name="$open_in_tool_bin ($open_in_tool_bin_name_readlink)"
+   fi
 
    ## Prettier name in default case.
    if [ "$open_in_tool_bin_name" = "x-www-browser (/usr/bin/torbrowser)" ]; then
@@ -230,7 +240,7 @@ final() {
 
    local open_in_tool_exit_code
    open_in_tool_exit_code="0"
-   $open_in_tool_bin $open_in_tool_extra_opts "$@" >/dev/null 2>/dev/null || { open_in_tool_exit_code="$?" ; true; };
+   DE=generic $open_in_tool_bin $open_in_tool_extra_opts "$@" >/dev/null 2>/dev/null || { open_in_tool_exit_code="$?" ; true; };
 
    if [ ! "$open_in_tool_exit_code" = "0" ]; then
       local question=""

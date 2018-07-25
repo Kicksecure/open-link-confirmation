@@ -52,7 +52,9 @@ preparation() {
 
    if command -v qubesdb-read >/dev/null 2>&1 ; then
       qubes_detected=true
-      qubes_type="$(qubesdb-read /type)"
+      ## Overwrite with '|| true' since 'qubesdb-read /type' is only avaible in
+      ## Qubes R4.0 and above.
+      qubes_type="$(qubesdb-read /type)" || true
    fi
 }
 
@@ -136,10 +138,15 @@ qubes_redirect() {
 }
 
 workstation() {
-   open_in_tool_bin="x-www-browser"
-   open_in_tool_bin_name_readlink="$(readlink -f "/usr/bin/x-www-browser")"
-   open_in_tool_bin_name="x-www-browser ($open_in_tool_bin_name_readlink)"
-   #open_in_tool_extra_opts="--new-tab"
+   if [ "$is_file" = "1" ]; then
+      [ -n "$open_in_tool_bin" ] || open_in_tool_bin="xdg-open"
+   else
+      [ -n "$open_in_tool_bin" ] || open_in_tool_bin="x-www-browser"
+      #[ -n "$open_in_tool_extra_opts" ] || open_in_tool_extra_opts="--new-tab"
+   fi
+
+   [ -n "$open_in_tool_bin_name_readlink" ] || open_in_tool_bin_name_readlink="$(readlink -f "$(command -v "$open_in_tool_bin")")"
+   [ -n "$open_in_tool_bin_name" ] || open_in_tool_bin_name="$open_in_tool_bin ($open_in_tool_bin_name_readlink)"
 
    ## Prettier name in default case.
    if [ "$open_in_tool_bin_name" = "x-www-browser (/usr/bin/torbrowser)" ]; then

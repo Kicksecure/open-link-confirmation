@@ -156,11 +156,11 @@ workstation() {
 
       [ -n "$open_in_tool_bin_name_readlink" ] || open_in_tool_bin_name_readlink="$(readlink -f "$(command -v "$open_in_tool_bin")")"
       [ -n "$open_in_tool_bin_name" ] || open_in_tool_bin_name="$open_in_tool_bin ($open_in_tool_bin_name_readlink)"
-   fi
 
-   ## Prettier name in default case.
-   if [ "$open_in_tool_bin_name" = "x-www-browser (/usr/bin/torbrowser)" ]; then
-      open_in_tool_bin_name="Tor Browser"
+      ## Prettier name in default case.
+      if [ "$open_in_tool_bin_name" = "x-www-browser (/usr/bin/torbrowser)" ]; then
+         open_in_tool_bin_name="Tor Browser"
+      fi
    fi
 
    if [ "$open_in_tool_bin_name_readlink" = "$BASH_SOURCE" ]; then

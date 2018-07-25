@@ -163,6 +163,9 @@ workstation() {
       fi
    fi
 
+   ## Fallback.
+   [ -n "$open_in_tool_bin_name" ] || open_in_tool_bin_name="$open_in_tool_bin"
+
    if [ "$open_in_tool_bin_name_readlink" = "$BASH_SOURCE" ]; then
       title="Link Confirm Open ERROR"
       msg="<p>The following <b>$type</b> cannot be opened in <u>$open_in_tool_bin_name</u>, because no browser is installed, that supports open-link-confirmation.</p>

@@ -1,3 +1,56 @@
+commit 248ed96a6b19b65193f6fe588851caf2bd9cea4f
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Wed Jul 25 19:13:58 2018 +0800
+
+    fallback
+
+commit ce8e11f9b97591c9623d53a117f6d0b0a9df4122
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Wed Jul 25 19:11:41 2018 +0800
+
+    refactoring
+
+commit 584163868c5ace754e189aa040976e5d53a0451a
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Wed Jul 25 19:05:02 2018 +0800
+
+    DE=generic
+    
+    Qubes sets 'GNOME_DESKTOP_SESSION_ID=c1' therefore `xdg-open`
+    detects gnome and sets 'DE=gnome3' which leads to
+    `xdg-mime query filetype` output being empty "". Therefore,
+    setting 'DE=generic'.;
+    
+    output: show name of desktop file which will be used by xdg-open
+
+commit 1d0d760af2e785b87a26474dfc7eda55307fbc50
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Wed Jul 25 17:22:16 2018 +0800
+
+    open files on workstation using xdg-open rather than x-www-browser
+    
+    Qubes R3.2 fix
+
+commit b6f037c87192b19e105cc194c9b89dc94154bc5a
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Jul 20 23:38:14 2018 +0800
+
+    Qubes DVM fixes
+
+commit b20a6efb8aa47e6cc8fdefa3439c232f75726eaf
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Jul 20 22:48:58 2018 +0800
+
+    don't ask for confirmation on first on in Qubes DispVM
+    
+    https://github.com/QubesOS/qubes-issues/issues/4113
+
+commit cfa1f5abfabbef4a4d94053b6951e0e9d2135a95
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Feb 1 15:10:45 2018 +0000
+
+    bumped changelog version
+
 commit 8c746a85fbcdcdc3a52a827bf6e1c547354028a3
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Mon Jan 29 15:50:32 2018 +0000

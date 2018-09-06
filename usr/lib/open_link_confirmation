@@ -5,8 +5,18 @@
 
 set -x
 
-## TODO
+## TODO: report error using an ERR trap
 set -e
+
+## 'set -e is important'. For example if open-link-confirmation is called from
+## other applications that are confined (by AppArmor or otherwise), striphtml
+## might fail.
+# /usr/lib/msgcollector/striphtml https://www.whonix.org
+# /usr/lib/open_link_confirmation: /usr/lib/msgcollector/striphtml: /usr/bin/python3: bad interpreter: Permission denied
+# + input_object_stripped_and_trimmed=
+# /usr/bin/torbrowser: /usr/lib/msgcollector/msgcollector: /bin/bash: bad interpreter: Permission denied
+# /usr/bin/torbrowser: /usr/lib/msgcollector/msgcollector: /bin/bash: bad interpreter: Permission denied
+# /usr/bin/torbrowser: /usr/lib/msgcollector/msgcollector: /bin/bash: bad interpreter: Permission denied
 
 source_config() {
    shopt -s nullglob

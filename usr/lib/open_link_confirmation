@@ -95,10 +95,14 @@ gateway() {
       exit "$open_in_tool_exit_code"
    fi
 
-   if [ "$qubes_detected" = "true" ] ; then
-      qubes_redirect "$@"
-      return 0
-   fi
+   ## Does not work.
+   ## Opens in Qubes-Whonix-Gateway based DispVM instead.
+   ## sys-whonix's 'default_dispvm' is not set to 'whonix-ws-14-dvm' by default.
+   ## https://github.com/QubesOS/qubes-issues/issues/4363
+   #if [ "$qubes_detected" = "true" ] ; then
+      #qubes_redirect "$@"
+      #return 0
+   #fi
 
    title="Link Confirm Open ERROR"
    msg="<p>Link Confirm Open does not support opening links on Gateway for security reasons.</p>

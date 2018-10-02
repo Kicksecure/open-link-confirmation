@@ -62,7 +62,7 @@ preparation() {
 
    if command -v qubesdb-read >/dev/null 2>&1 ; then
       qubes_detected=true
-      ## Overwrite with '|| true' since 'qubesdb-read /type' is only avaible in
+      ## Overwrite with '|| true' since 'qubesdb-read /type' is only available in
       ## Qubes R4.0 and above.
       qubes_type="$(qubesdb-read /type)" || true
    fi

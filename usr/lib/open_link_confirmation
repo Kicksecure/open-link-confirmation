@@ -28,9 +28,53 @@ source_config() {
    done
 }
 
+parse_cmd_options() {
+   ## Thanks to:
+   ## http://mywiki.wooledge.org/BashFAQ/035
+
+   while :
+   do
+       case $1 in
+           --i2p)
+               tb_using_i2p="--i2p"
+               tb_title="i2p Browser"
+               shift
+               ;;
+           --)
+               shift
+               break
+               ;;
+           *)
+               break
+               ;;
+       esac
+   done
+
+   ## If there are input files (for example) that follow the options, they
+   ## will remain in the "$@" positional parameters.
+
+   local other_args
+   other_args="$@"
+   if [ "$other_args" = "" ]; then
+      have_other_args="false"
+      if [ "$LINK" = "" ]; then
+         LINK="$DEFAULT_LINK"
+         if [ "$open_link_confirmation_maybe_skip" = "true" ]; then
+            open_link_confirmation_skip="true"
+         fi
+      fi
+   else
+      have_other_args="true"
+      tor_other_args="$@"
+      echo "$tor_other_args"
+   fi
+}
+
 preparation() {
    ## Used by tb-starter.
    export OPEN_LINK_CONFIRMATION="true"
+
+   [ -n "$tb_title" ] || tb_title="Tor Browser"
 
    if [ "$#" = "0" ]; then
       ## Zero arguments.
@@ -106,7 +150,7 @@ gateway() {
 
    title="Link Confirm Open ERROR"
    msg="<p>Link Confirm Open does not support opening links on Gateway for security reasons.</p>
-<p>Use Tor Browser under Workstation to browse the internet.</p>"
+<p>Use $tb_title under Workstation to browse the internet.</p>"
    question=""
    button="ok"
    /usr/lib/msgcollector/generic_gui_message "error" "$title" "$msg" "$question" "$button"
@@ -140,7 +184,7 @@ qubes_redirect() {
 <p><code><blockquote>$input_object_stripped_and_trimmed$extra_long_link</blockquote></code></p>
 
 <p>Please copy the link to the Workstation and open it there.</p>
-<p>Use Tor Browser under Workstation to browse the internet.</p>
+<p>Use $tb_title under Workstation to browse the internet.</p>
 
 <p>Debugging information:
 <br></br>link_confirmation_vm_open_tool: <code>$link_confirmation_vm_open_tool</code>
@@ -173,7 +217,7 @@ workstation() {
 
       ## Prettier name in default case.
       if [ "$open_in_tool_bin_name" = "x-www-browser (/usr/bin/torbrowser)" ]; then
-         open_in_tool_bin_name="Tor Browser"
+         open_in_tool_bin_name="$tb_title"
       fi
    fi
 
@@ -271,6 +315,7 @@ final() {
 
 main_function() {
    source_config "$@"
+   parse_cmd_options "$@"
    preparation "$@"
 
    if [ -f "/var/run/qubes/this-is-templatevm" ]; then

@@ -28,53 +28,9 @@ source_config() {
    done
 }
 
-parse_cmd_options() {
-   ## Thanks to:
-   ## http://mywiki.wooledge.org/BashFAQ/035
-
-   while :
-   do
-       case $1 in
-           --i2p)
-               tb_using_i2p="--i2p"
-               tb_title="i2p Browser"
-               shift
-               ;;
-           --)
-               shift
-               break
-               ;;
-           *)
-               break
-               ;;
-       esac
-   done
-
-   ## If there are input files (for example) that follow the options, they
-   ## will remain in the "$@" positional parameters.
-
-   local other_args
-   other_args="$@"
-   if [ "$other_args" = "" ]; then
-      have_other_args="false"
-      if [ "$LINK" = "" ]; then
-         LINK="$DEFAULT_LINK"
-         if [ "$open_link_confirmation_maybe_skip" = "true" ]; then
-            open_link_confirmation_skip="true"
-         fi
-      fi
-   else
-      have_other_args="true"
-      tor_other_args="$@"
-      echo "$tor_other_args"
-   fi
-}
-
 preparation() {
    ## Used by tb-starter.
    export OPEN_LINK_CONFIRMATION="true"
-
-   [ -n "$tb_title" ] || tb_title="Tor Browser"
 
    if [ "$#" = "0" ]; then
       ## Zero arguments.
@@ -217,7 +173,11 @@ workstation() {
 
       ## Prettier name in default case.
       if [ "$open_in_tool_bin_name" = "x-www-browser (/usr/bin/torbrowser)" ]; then
-         open_in_tool_bin_name="$tb_title"
+         if [ "$tb_using_i2p" = "--i2p" ]; then
+            open_in_tool_bin_name="$tb_title"
+         else
+            open_in_tool_bin_name="Tor Browser"
+         fi
       fi
    fi
 
@@ -315,7 +275,6 @@ final() {
 
 main_function() {
    source_config "$@"
-   parse_cmd_options "$@"
    preparation "$@"
 
    if [ -f "/var/run/qubes/this-is-templatevm" ]; then

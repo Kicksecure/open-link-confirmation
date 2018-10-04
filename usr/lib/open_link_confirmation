@@ -106,7 +106,7 @@ gateway() {
 
    title="Link Confirm Open ERROR"
    msg="<p>Link Confirm Open does not support opening links on Gateway for security reasons.</p>
-<p>Use Tor Browser under Workstation to browse the internet.</p>"
+<p>Use $tb_title under Workstation to browse the internet.</p>"
    question=""
    button="ok"
    /usr/lib/msgcollector/generic_gui_message "error" "$title" "$msg" "$question" "$button"
@@ -140,7 +140,7 @@ qubes_redirect() {
 <p><code><blockquote>$input_object_stripped_and_trimmed$extra_long_link</blockquote></code></p>
 
 <p>Please copy the link to the Workstation and open it there.</p>
-<p>Use Tor Browser under Workstation to browse the internet.</p>
+<p>Use $tb_title under Workstation to browse the internet.</p>
 
 <p>Debugging information:
 <br></br>link_confirmation_vm_open_tool: <code>$link_confirmation_vm_open_tool</code>
@@ -173,7 +173,11 @@ workstation() {
 
       ## Prettier name in default case.
       if [ "$open_in_tool_bin_name" = "x-www-browser (/usr/bin/torbrowser)" ]; then
-         open_in_tool_bin_name="Tor Browser"
+         if [ "$tb_using_i2p" = "--i2p" ]; then
+            open_in_tool_bin_name="$tb_title"
+         else
+            open_in_tool_bin_name="Tor Browser"
+         fi
       fi
    fi
 

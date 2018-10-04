@@ -1,3 +1,38 @@
+commit d317f94d2db614e5095b2cc47d84ab59582c6d80
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Oct 2 15:51:58 2018 -0400
+
+    typo
+
+commit a06e2aed20c7398e50bd1d2fd67c97566ea5e776
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Oct 2 15:42:56 2018 -0400
+
+    fix
+
+commit 8e8ae87da1a3fb702235f2750e789a2af8fd3e64
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Oct 2 15:24:39 2018 -0400
+
+    fix, remove outdated config entries
+    
+    fixes Qubes-Whonix-Gateway running
+    /usr/lib/open_link_confirmation https://some-link
+    and opens in DispVM instead
+    
+    in other words, fixes:
+    Debugging information:
+    link_confirmation_vm_open_tool: qvm-open-in-vm
+    input_object_stripped_and_trimmed: http://127.0.0.1:7657/
+    link_confirmation_vm_open_tool_output: Usage: /usr/bin/qvm-open-in-vm [--view-only] vmname filename
+    link_confirmation_vm_open_tool_exit_code: 2
+
+commit 1c8f5eec17c0566d83fcc09439f66e9532ade38d
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Sep 10 07:36:06 2018 +0000
+
+    bumped changelog version
+
 commit bbe422fd4e1325704fdc2c8b1da4cfb7dbe4307a
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Thu Sep 6 08:45:47 2018 +0000

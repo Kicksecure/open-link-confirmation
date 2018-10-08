@@ -1,3 +1,50 @@
+commit d025b0011e5ebdf608996567f145d395a3248e2d
+Merge: 32eef13 51b2c7e
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Oct 8 11:38:10 2018 +0000
+
+    Merge remote-tracking branch 'origin/master'
+
+commit 51b2c7e93f712da6cb8a0d5ea68d5799e2f2ddf5
+Merge: 32eef13 128bf0b
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Oct 8 11:37:34 2018 +0000
+
+    Merge pull request #2 from eyedeekay/master
+    
+    Labeling non-tor Browsers
+
+commit 128bf0b0140a1689892c3541b0a0b927fe8a6582
+Author: idk <problemsolver@openmailbox.org>
+Date:   Mon Oct 8 01:10:19 2018 -0400
+
+    That's... not really a fallback anymore, but it should always work.
+
+commit 19ba0dc1f2f0e12f82bf4e9aa24928ed352e719c
+Merge: 016cb95 32eef13
+Author: idk <problemsolver@openmailbox.org>
+Date:   Thu Oct 4 13:31:39 2018 -0400
+
+    Merge branch 'master' of https://github.com/whonix/open-link-confirmation
+
+commit 016cb959bbf510c70cdba33024d447e0eb98c7d2
+Author: idk <problemsolver@openmailbox.org>
+Date:   Thu Oct 4 13:29:05 2018 -0400
+
+    label non-Tor browsers
+
+commit 32eef134444a9280e4599d31c624f62f0d77e672
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Wed Oct 3 13:47:36 2018 +0000
+
+    bumped changelog version
+
+commit 24f0c9c42d98965f99b5e9eec8e2988e0fda80a5
+Author: idk <problemsolver@openmailbox.org>
+Date:   Tue Oct 2 23:07:15 2018 -0400
+
+    enabled the --i2p flag.
+
 commit d317f94d2db614e5095b2cc47d84ab59582c6d80
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Tue Oct 2 15:51:58 2018 -0400

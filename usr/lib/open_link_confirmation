@@ -173,15 +173,12 @@ workstation() {
 
       ## Prettier name in default case.
       if [ "$open_in_tool_bin_name" = "x-www-browser (/usr/bin/torbrowser)" ]; then
-         if [ "$tb_using_i2p" = "--i2p" ]; then
-            open_in_tool_bin_name="$tb_title"
-         else
-            open_in_tool_bin_name="Tor Browser"
-         fi
+         open_in_tool_bin_name="Tor Browser"
       fi
    fi
 
    ## Fallback.
+   [ ! -n "$tb_title" ] || open_in_tool_bin_name="$tb_title"
    [ -n "$open_in_tool_bin_name" ] || open_in_tool_bin_name="$open_in_tool_bin"
 
    if [ "$open_in_tool_bin_name_readlink" = "$BASH_SOURCE" ]; then

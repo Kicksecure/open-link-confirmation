@@ -1,3 +1,15 @@
+commit 30810e6fa96b80a749505ea60e9dfb0d915edf14
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Nov 13 04:15:30 2018 -0500
+
+    fix output
+
+commit 4e6e8580978ceca0c6c8ff90d04930bf66b0d178
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Oct 8 11:42:35 2018 +0000
+
+    bumped changelog version
+
 commit d025b0011e5ebdf608996567f145d395a3248e2d
 Merge: 32eef13 51b2c7e
 Author: Patrick Schleizer <adrelanos@riseup.net>

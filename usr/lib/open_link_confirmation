@@ -81,6 +81,8 @@ gateway() {
       open_in_tool_bin_name="KWrite"
    fi
 
+   [ -n "$tb_title" ] || tb_title="Tor Browser"
+
    open_in_tool_extra_opts=""
 
    if [ "$is_file" = "1" ]; then

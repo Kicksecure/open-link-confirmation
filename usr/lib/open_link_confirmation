@@ -276,7 +276,7 @@ main_function() {
    source_config "$@"
    preparation "$@"
 
-   if [ -f "/var/run/qubes/this-is-templatevm" ]; then
+   if [ -f "/run/qubes/this-is-templatevm" ]; then
       qubes_redirect "$@"
    elif [ -f "/usr/share/anon-gw-base-files/gateway" ]; then
       gateway "$@"

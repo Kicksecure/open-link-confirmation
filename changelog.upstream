@@ -1,3 +1,15 @@
+commit fd42ca53942cb5bbf51b2474e6ac37b8583bd54c
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Aug 15 14:08:20 2019 +0000
+
+    kwrite -> mousepad
+
+commit 0112e648ba32fce00a272c3fe381b02186f2d4e5
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Aug 1 11:57:45 2019 +0000
+
+    bumped changelog version
+
 commit b428ba30303d3d0a009089e126aece9a7a1c7c59
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Thu Aug 1 11:13:40 2019 +0000

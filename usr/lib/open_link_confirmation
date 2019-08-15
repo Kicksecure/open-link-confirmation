@@ -77,8 +77,8 @@ gateway() {
       #open_in_tool_bin="?"
       #open_in_tool_bin_name="?"
    else
-      open_in_tool_bin="kwrite"
-      open_in_tool_bin_name="KWrite"
+      open_in_tool_bin="mousepad"
+      open_in_tool_bin_name="Mousepad"
    fi
 
    [ -n "$tb_title" ] || tb_title="Tor Browser"

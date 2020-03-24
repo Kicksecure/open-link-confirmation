@@ -1,3 +1,15 @@
+commit 373a376e975ee30c886ca0c1e59d8f5c7ef3d719
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Mar 24 03:42:31 2020 -0400
+
+    /usr/local/etc/open_link_confirm.d/*.conf
+
+commit 509f003a0f2b51e24ca54a4c84b7ede8fe6ea6fc
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Sep 13 13:36:45 2019 +0000
+
+    bumped changelog version
+
 commit f0dfbeeab479864894a6f21eff937d542d554226
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Fri Sep 13 08:55:34 2019 -0400

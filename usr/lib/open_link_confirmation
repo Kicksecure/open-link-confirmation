@@ -21,7 +21,11 @@ set -e
 source_config() {
    shopt -s nullglob
    local i
-   for i in /etc/open_link_confirm.d/*.conf /rw/config/open_link_confirm.d/*.conf; do
+   for i in \
+      /etc/open_link_confirm.d/*.conf \
+      /rw/config/open_link_confirm.d/*.conf \
+      /usr/local/etc/open_link_confirm.d/*.conf \
+      ; do
       ## TODO
       bash -n "$i" || exit 1
       source "$i"

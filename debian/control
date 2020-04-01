@@ -5,7 +5,7 @@ Source: open-link-confirmation
 Section: misc
 Priority: optional
 Maintainer: Patrick Schleizer <adrelanos@riseup.net>
-Build-Depends: debhelper (>= 12), genmkfile
+Build-Depends: debhelper (>= 12)
 Homepage: https://github.com/Whonix/open-link-confirmation
 Vcs-Browser: https://github.com/Whonix/open-link-confirmation
 Vcs-Git: https://github.com/Whonix/open-link-confirmation.git

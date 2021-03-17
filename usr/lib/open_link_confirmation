@@ -171,6 +171,12 @@ workstation() {
          open_in_tool_bin_name="$xdg_desktop_file"
       fi
    else
+      if test -e /usr/share/kicksecure/marker ; then
+         if command -v chromium >/dev/null 2>&1 ; then
+            [ -n "$open_in_tool_bin" ] || open_in_tool_bin="chromium"
+         fi
+      fi
+
       [ -n "$open_in_tool_bin" ] || open_in_tool_bin="x-www-browser"
       #[ -n "$open_in_tool_extra_opts" ] || open_in_tool_extra_opts="--new-tab"
 

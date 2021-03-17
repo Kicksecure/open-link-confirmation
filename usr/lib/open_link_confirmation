@@ -208,7 +208,7 @@ workstation() {
 
    local careful_text
 
-   if [ "$open_in_tool_bin_name" = "SecBrowser" ]; then
+   if test -e /usr/share/kicksecure/marker ; then
       careful_text="<p></p>"
    else
       careful_text="<p>Be careful if <b>$open_in_tool_bin_name</b> is already running as your activities might get linked.</p>"

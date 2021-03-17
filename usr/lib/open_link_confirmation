@@ -58,10 +58,10 @@ preparation() {
 
    if [ -f "$input_object_original" ]; then
       is_file="1"
-      type="file"
+      input_type="file"
    else
       is_file="0"
-      type="link"
+      input_type="link"
    fi
 
    if command -v qubesdb-read &>/dev/null ; then
@@ -141,7 +141,7 @@ qubes_redirect() {
    question=""
    button="ok"
    msg="\
-<p>The following <u>$type</u> could not be opened.</p>
+<p>The following <u>$input_type</u> could not be opened.</p>
 
 <p><code><blockquote>$input_object_stripped_and_trimmed$extra_long_link</blockquote></code></p>
 
@@ -198,7 +198,7 @@ workstation() {
 
    if [ "$open_in_tool_bin_name_readlink" = "$BASH_SOURCE" ]; then
       title="Link Confirm Open ERROR"
-      msg="<p>The following <b>$type</b> cannot be opened in <u>$open_in_tool_bin_name</u>, because no browser is installed, that supports open-link-confirmation.</p>
+      msg="<p>The following <b>$input_type</b> cannot be opened in <u>$open_in_tool_bin_name</u>, because no browser is installed, that supports open-link-confirmation.</p>
 <p><code><blockquote>$input_object_stripped_and_trimmed$extra_long_link</blockquote></code></p>"
       question=""
       button="ok"
@@ -224,7 +224,7 @@ workstation() {
    fi
 
    title="Confirm Open"
-   msg="<p>The following <b>$type</b> will be opened in <u>$open_in_tool_bin_name</u>.</p>
+   msg="<p>The following <b>$input_type</b> will be opened in <u>$open_in_tool_bin_name</u>.</p>
 $careful_text
 <p><code><blockquote>$input_object_stripped_and_trimmed$extra_long_link</blockquote></code></p>"
    question="Continue?"

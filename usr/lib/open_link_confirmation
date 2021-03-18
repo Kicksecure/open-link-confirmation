@@ -215,12 +215,17 @@ workstation() {
    fi
 
    if [ "$input_object_stripped_and_trimmed" = "" ] || [ "$input_object_stripped_and_trimmed" = " " ]; then
-      title="Confirm Open"
-      msg="$careful_text
+      if test -e /usr/share/kicksecure/marker ; then
+         skip_open_link_confirmation="1"
+         return 0
+      else
+         title="Confirm Open"
+         msg="$careful_text
 <p>$input_object_stripped_and_trimmed$extra_long_link</p>"
-      question="Do you want to open <b>$open_in_tool_bin_name</b>?"
-      button="yesno"
-      return 0
+         question="Do you want to open <b>$open_in_tool_bin_name</b>?"
+         button="yesno"
+         return 0
+      fi
    fi
 
    title="Confirm Open"
@@ -262,12 +267,16 @@ final() {
       fi
    fi
 
-   if [ "$ask_for_confirmation" = "1" ]; then
-      local answer
-      answer="0"
-      answer="$(/usr/lib/msgcollector/generic_gui_message "warning" "$title" "$msg" "$question" "$button")"
-      if [ ! "$answer" = "16384" ]; then ## Button 'Yes' has not been pressed.
-         exit 0
+   if [ "$skip_open_link_confirmation" = "1" ]; then
+      true
+   else
+      if [ "$ask_for_confirmation" = "1" ]; then
+         local answer
+         answer="0"
+         answer="$(/usr/lib/msgcollector/generic_gui_message "warning" "$title" "$msg" "$question" "$button")"
+         if [ ! "$answer" = "16384" ]; then ## Button 'Yes' has not been pressed.
+            exit 0
+         fi
       fi
    fi
 

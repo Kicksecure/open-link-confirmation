@@ -187,9 +187,6 @@ workstation() {
       if [ "$open_in_tool_bin_name" = "x-www-browser (/usr/bin/torbrowser)" ]; then
          open_in_tool_bin_name="Tor Browser"
       fi
-      if [ "$open_in_tool_bin_name" = "x-www-browser (/usr/bin/secbrowser)" ]; then
-         open_in_tool_bin_name="SecBrowser"
-      fi
    fi
 
    ## Fallback.

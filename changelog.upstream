@@ -1,3 +1,15 @@
+commit 7c8fce21d7146a370adbd3073f25b4602901b813
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Apr 28 08:48:31 2021 -0400
+
+    remove SecBrowser code since deprecated
+
+commit bd660be32539d760d9287cdd2af3524a414176e6
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Mar 18 07:45:19 2021 -0400
+
+    bumped changelog version
+
 commit 8b11d05bee7c5488bd5cbf34518cfe1ae155082e
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Thu Mar 18 07:26:47 2021 -0400

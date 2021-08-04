@@ -6,4 +6,4 @@
 ## See also:
 ## The Default Browser on Linux Debacle
 ## http://blog.codef00.com/2011/02/18/the-default-browser-on-linux-debacle/
-export BROWSER="/usr/lib/open_link_confirmation"
+export BROWSER="/usr/libexec/open-link-confirmation"

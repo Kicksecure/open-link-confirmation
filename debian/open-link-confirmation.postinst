@@ -9,7 +9,7 @@ fi
 
 set -e
 
-update-alternatives --install /usr/bin/x-www-browser x-www-browser /usr/lib/open_link_confirmation 105
-update-alternatives --install /usr/bin/gnome-www-browser gnome-www-browser /usr/lib/open_link_confirmation 105
+update-alternatives --install /usr/bin/x-www-browser x-www-browser /usr/libexec/open-link-confirmation 105
+update-alternatives --install /usr/bin/gnome-www-browser gnome-www-browser /usr/libexec/open-link-confirmation 105
 
 #DEBHELPER#

@@ -11,12 +11,12 @@ set -e
 ## 'set -e is important'. For example if open-link-confirmation is called from
 ## other applications that are confined (by AppArmor or otherwise), striphtml
 ## might fail.
-# /usr/lib/msgcollector/striphtml https://www.whonix.org
-# /usr/lib/open_link_confirmation: /usr/lib/msgcollector/striphtml: /usr/bin/python3: bad interpreter: Permission denied
+# /usr/libexec/msgcollector/striphtml https://www.whonix.org
+# /usr/lib/open_link_confirmation: /usr/libexec/msgcollector/striphtml: /usr/bin/python3: bad interpreter: Permission denied
 # + input_object_stripped_and_trimmed=
-# /usr/bin/torbrowser: /usr/lib/msgcollector/msgcollector: /bin/bash: bad interpreter: Permission denied
-# /usr/bin/torbrowser: /usr/lib/msgcollector/msgcollector: /bin/bash: bad interpreter: Permission denied
-# /usr/bin/torbrowser: /usr/lib/msgcollector/msgcollector: /bin/bash: bad interpreter: Permission denied
+# /usr/bin/torbrowser: /usr/libexec/msgcollector/msgcollector: /bin/bash: bad interpreter: Permission denied
+# /usr/bin/torbrowser: /usr/libexec/msgcollector/msgcollector: /bin/bash: bad interpreter: Permission denied
+# /usr/bin/torbrowser: /usr/libexec/msgcollector/msgcollector: /bin/bash: bad interpreter: Permission denied
 
 source_config() {
    shopt -s nullglob
@@ -50,7 +50,7 @@ preparation() {
    ## Trim input_object_original to 128 characters.
    input_object_trimmed="${input_object_original:0:$trim}"
 
-   input_object_stripped_and_trimmed="$(/usr/lib/msgcollector/striphtml "$input_object_trimmed")"
+   input_object_stripped_and_trimmed="$(/usr/libexec/msgcollector/striphtml "$input_object_trimmed")"
 
    if [ "$input_object_string_length" -gt "$trim" ]; then
       extra_long_link="<p><b>Note</b>: The address is too long, so only the first <u>$trim</u> characters are shown.</p>"
@@ -115,7 +115,7 @@ gateway() {
 <p>Use $tb_title under Workstation to browse the internet.</p>"
    question=""
    button="ok"
-   /usr/lib/msgcollector/generic_gui_message "error" "$title" "$msg" "$question" "$button"
+   /usr/libexec/msgcollector/generic_gui_message "error" "$title" "$msg" "$question" "$button"
    exit 0
 }
 
@@ -153,7 +153,7 @@ qubes_redirect() {
 <br></br>input_object_stripped_and_trimmed: <code>$input_object_stripped_and_trimmed</code>
 <br></br>link_confirmation_vm_open_tool_output: <code>$link_confirmation_vm_open_tool_output</code>
 <br></br>link_confirmation_vm_open_tool_exit_code: <u>$link_confirmation_vm_open_tool_exit_code</u></p>"
-   /usr/lib/msgcollector/generic_gui_message "error" "$title" "$msg" "$question" "$button"
+   /usr/libexec/msgcollector/generic_gui_message "error" "$title" "$msg" "$question" "$button"
    exit 1
 }
 
@@ -199,7 +199,7 @@ workstation() {
 <p><code><blockquote>$input_object_stripped_and_trimmed$extra_long_link</blockquote></code></p>"
       question=""
       button="ok"
-      /usr/lib/msgcollector/generic_gui_message "error" "$title" "$msg" "$question" "$button"
+      /usr/libexec/msgcollector/generic_gui_message "error" "$title" "$msg" "$question" "$button"
       exit 0
    fi
 
@@ -270,7 +270,7 @@ final() {
       if [ "$ask_for_confirmation" = "1" ]; then
          local answer
          answer="0"
-         answer="$(/usr/lib/msgcollector/generic_gui_message "warning" "$title" "$msg" "$question" "$button")"
+         answer="$(/usr/libexec/msgcollector/generic_gui_message "warning" "$title" "$msg" "$question" "$button")"
          if [ ! "$answer" = "16384" ]; then ## Button 'Yes' has not been pressed.
             exit 0
          fi
@@ -281,7 +281,7 @@ final() {
       local question=""
       local button="ok"
       local msg="<p><b><u>ERROR</b></u>: <b>$open_in_tool_bin</b> does not exist! Please report this bug!</p>"
-      /usr/lib/msgcollector/generic_gui_message "error" "$title" "$msg" "$question" "$button"
+      /usr/libexec/msgcollector/generic_gui_message "error" "$title" "$msg" "$question" "$button"
       exit 1
    fi
 
@@ -293,7 +293,7 @@ final() {
       local question=""
       local button="ok"
       local msg="<p><b><u>ERROR</b></u>: <b>$open_in_tool_bin</b> returned <u>$open_in_tool_exit_code</u>! Please report this bug!</p>"
-      /usr/lib/msgcollector/generic_gui_message "error" "$title" "$msg" "$question" "$button"
+      /usr/libexec/msgcollector/generic_gui_message "error" "$title" "$msg" "$question" "$button"
    fi
 
    exit "$open_in_tool_exit_code"

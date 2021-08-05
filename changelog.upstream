@@ -1,3 +1,46 @@
+commit 068f777e3c6ad9118e9d785207399ec40fd1804f
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Aug 4 06:52:43 2021 -0400
+
+    usr/libexec/open-link-confirmation/open_link_confirmation -> usr/libexec/open-link-confirmation/open-link-confirmation
+
+commit 1a44c9d906dd398ad119e73593a99e9b253da300
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Aug 4 06:51:20 2021 -0400
+
+    renamed:    usr/lib/open-link-confirmation/open-link-confirmation.sh -> usr/libexec/open-link-confirmation/open-link-confirmation.sh
+    renamed:    usr/lib/open_link_confirmation -> usr/libexec/open-link-confirmation/open_link_confirmation
+
+commit 864f207ba6ed53218f73ee50131c722455957612
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Aug 4 06:42:12 2021 -0400
+
+    move /usr/lib/msgcollector to /usr/libexec/msgcollector as per lintian FHS
+
+commit 9e14d66866d70dea127db266a38f028514fd42b6
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Tue Aug 3 12:48:55 2021 -0400
+
+    move /usr/lib/helper-scripts and /usr/lib/curl-scripts to /usr/libexec/helper-scripts as per lintian FHS
+
+commit 3866b357b73733a6edbd06129630d15af4597bd2
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Tue Aug 3 05:48:24 2021 -0400
+
+    bullseye
+
+commit 231f71e027e73e0d65009a2a6cfe96994d9bad39
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sun Aug 1 16:24:36 2021 -0400
+
+    readme
+
+commit dfd2c1cbf2a2b3173aaa03ce939a06510aadd594
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed May 5 08:36:18 2021 -0400
+
+    bumped changelog version
+
 commit 7c8fce21d7146a370adbd3073f25b4602901b813
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Wed Apr 28 08:48:31 2021 -0400

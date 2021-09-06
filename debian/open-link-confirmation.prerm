@@ -9,7 +9,7 @@ fi
 
 set -e
 
-update-alternatives --remove x-www-browser /usr/libexec/open-link-confirmation
-update-alternatives --remove gnome-www-browser /usr/libexec/open-link-confirmation
+update-alternatives --remove x-www-browser /usr/libexec/open-link-confirmation/open-link-confirmation
+update-alternatives --remove gnome-www-browser /usr/libexec/open-link-confirmation/open-link-confirmation
 
 #DEBHELPER#

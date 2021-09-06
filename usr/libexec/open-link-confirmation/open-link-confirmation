@@ -12,7 +12,7 @@ set -e
 ## other applications that are confined (by AppArmor or otherwise), striphtml
 ## might fail.
 # /usr/libexec/msgcollector/striphtml https://www.whonix.org
-# /usr/libexec/open-link-confirmation: /usr/libexec/msgcollector/striphtml: /usr/bin/python3: bad interpreter: Permission denied
+# /usr/libexec/open-link-confirmation/open-link-confirmation: /usr/libexec/msgcollector/striphtml: /usr/bin/python3: bad interpreter: Permission denied
 # + input_object_stripped_and_trimmed=
 # /usr/bin/torbrowser: /usr/libexec/msgcollector/msgcollector: /bin/bash: bad interpreter: Permission denied
 # /usr/bin/torbrowser: /usr/libexec/msgcollector/msgcollector: /bin/bash: bad interpreter: Permission denied

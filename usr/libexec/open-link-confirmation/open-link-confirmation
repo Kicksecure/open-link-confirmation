@@ -33,6 +33,15 @@ source_config() {
 }
 
 preparation() {
+   ## Infinite loop protection.
+   [ -n "$OPEN_LINK_CONFIRMATION_MAXIMUM" ] || OPEN_LINK_CONFIRMATION_MAXIMUM="5"
+   [ -n "$OPEN_LINK_CONFIRMATION_COUNTER" ] || OPEN_LINK_CONFIRMATION_COUNTER="0"
+   OPEN_LINK_CONFIRMATION_COUNTER=$(( OPEN_LINK_CONFIRMATION_COUNTER + 1 ))
+   if [ "$OPEN_LINK_CONFIRMATION_COUNTER" -ge "$OPEN_LINK_CONFIRMATION_MAXIMUM" ]; then
+      echo "$0: ERROR: recursively called more than $OPEN_LINK_CONFIRMATION_MAXIMUM times!"
+      exit 211
+   fi
+
    ## Used by tb-starter.
    export OPEN_LINK_CONFIRMATION="true"
 

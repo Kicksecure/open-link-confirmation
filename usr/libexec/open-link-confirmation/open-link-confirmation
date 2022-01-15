@@ -185,6 +185,9 @@ workstation() {
          if command -v chromium &>/dev/null ; then
             [ -n "$open_in_tool_bin" ] || open_in_tool_bin="chromium"
          fi
+         if command -v firefox &>/dev/null ; then
+            [ -n "$open_in_tool_bin" ] || open_in_tool_bin="firefox"
+         fi
       fi
 
       [ -n "$open_in_tool_bin" ] || open_in_tool_bin="x-www-browser"

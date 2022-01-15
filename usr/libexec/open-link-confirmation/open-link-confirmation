@@ -39,7 +39,12 @@ preparation() {
    OPEN_LINK_CONFIRMATION_COUNTER=$(( OPEN_LINK_CONFIRMATION_COUNTER + 1 ))
    export OPEN_LINK_CONFIRMATION_COUNTER
    if [ "$OPEN_LINK_CONFIRMATION_COUNTER" -ge "$OPEN_LINK_CONFIRMATION_MAXIMUM" ]; then
-      echo "$0: ERROR: recursively called more than $OPEN_LINK_CONFIRMATION_MAXIMUM times!"
+      echo "$0: ERROR: recursively called more than $OPEN_LINK_CONFIRMATION_MAXIMUM times!" >&2
+      title="Link Confirm Open ERROR"
+      msg="<p>Recursively called more than $OPEN_LINK_CONFIRMATION_MAXIMUM times, maybe because no browser is installed, that supports open-link-confirmation.</p>"
+      question=""
+      button="ok"
+      /usr/libexec/msgcollector/generic_gui_message "error" "$title" "$msg" "$question" "$button"
       exit 211
    fi
 

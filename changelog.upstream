@@ -1,3 +1,21 @@
+commit 38e03d1737b185934fc0a6f4c3558b1666c2a978
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sat Jan 15 12:41:32 2022 -0500
+
+    add infinite recursive loop protection
+
+commit 872cfc20ef7766527ccb589355ef2ffdbdd2edb8
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Tue Nov 9 14:32:32 2021 -0500
+
+    readme
+
+commit fae6451754a39a83b6f46f56bdb6e7d6086162b4
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sun Sep 12 11:52:39 2021 -0400
+
+    bumped changelog version
+
 commit d207eeb88a5ff67c25aa1ab6274b8c44a77c4f2a
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Sat Sep 11 16:31:37 2021 -0400

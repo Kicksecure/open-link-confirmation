@@ -14,7 +14,7 @@ Rules-Requires-Root: no
 
 Package: open-link-confirmation
 Architecture: all
-Depends: sensible-utils, anon-icon-pack,
+Depends: sensible-utils, icon-pack-dist,
  msgcollector, xdg-utils, ${misc:Depends}
 Recommends: tb-starter, tb-updater, tb-default-browser
 Description: Asks for confirmation before opening links

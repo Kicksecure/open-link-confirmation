@@ -23,7 +23,6 @@ source_config() {
    local i
    for i in \
       /etc/open_link_confirm.d/*.conf \
-      /rw/config/open_link_confirm.d/*.conf \
       /usr/local/etc/open_link_confirm.d/*.conf \
       ; do
       ## TODO

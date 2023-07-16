@@ -5,7 +5,6 @@
 
 set -x
 
-## TODO: report error using an ERR trap
 set -e
 
 ## 'set -e is important'. For example if open-link-confirmation is called from
@@ -17,6 +16,32 @@ set -e
 # /usr/bin/torbrowser: /usr/libexec/msgcollector/msgcollector: /bin/bash: bad interpreter: Permission denied
 # /usr/bin/torbrowser: /usr/libexec/msgcollector/msgcollector: /bin/bash: bad interpreter: Permission denied
 # /usr/bin/torbrowser: /usr/libexec/msgcollector/msgcollector: /bin/bash: bad interpreter: Permission denied
+
+trap "error_handler" ERR
+
+error_handler() {
+   local exit_code="$?"
+
+   local MSG="$0 script bug.
+
+No panic. Nothing is broken. Just some rare condition has been hit.
+Try again later. If this is a transient issue, it can be safely ignored.
+
+Debugging information:
+
+BASH_COMMAND: <code>$BASH_COMMAND</code>
+exit_code: <code>$exit_code</code>"
+
+   MSG="$(/usr/libexec/msgcollector/br_add "$MSG")"
+
+   local title="open-link-confirmation bug"
+   local question=""
+   local button="ok"
+   local msg="<p>$MSG</p>"
+   /usr/libexec/msgcollector/generic_gui_message "error" "$title" "$msg" "$question" "$button"
+
+   exit 1
+}
 
 source_config() {
    shopt -s nullglob

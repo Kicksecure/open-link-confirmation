@@ -1,3 +1,15 @@
+commit 50e403c53b3f36acd21703002561347e37eac7eb
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sun Jul 16 15:14:43 2023 -0400
+
+    disable debugging
+
+commit 1e904374825ee28c435786ab1110e8009c805996
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sun Jul 16 15:04:29 2023 -0400
+
+    bumped changelog version
+
 commit 52d1dce3fa8d9815a6db6b7bb38a2f112d4f1962
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Sun Jul 16 14:45:12 2023 -0400

@@ -331,12 +331,14 @@ final() {
    open_in_tool_exit_code="0"
    DE=generic $open_in_tool_bin $open_in_tool_extra_opts "$@" >/dev/null 2>/dev/null || { open_in_tool_exit_code="$?" ; true; };
 
-   if [ ! "$open_in_tool_exit_code" = "0" ]; then
-      local question=""
-      local button="ok"
-      local msg="<p><b><u>ERROR</b></u>: <b>$open_in_tool_bin</b> returned <u>$open_in_tool_exit_code</u>! Please report this bug!</p>"
-      /usr/libexec/msgcollector/generic_gui_message "error" "$title" "$msg" "$question" "$button"
-   fi
+   ## Do not show an error popup.
+   ## For example if Tor Browser or Firefox gets killed, the exit code should be handled by the calling application as per usual.
+#    if [ ! "$open_in_tool_exit_code" = "0" ]; then
+#       local question=""
+#       local button="ok"
+#       local msg="<p><b><u>ERROR</b></u>: <b>$open_in_tool_bin</b> returned <u>$open_in_tool_exit_code</u>! Please report this bug!</p>"
+#       /usr/libexec/msgcollector/generic_gui_message "error" "$title" "$msg" "$question" "$button"
+#    fi
 
    exit "$open_in_tool_exit_code"
 }

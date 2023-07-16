@@ -1,3 +1,23 @@
+commit 52d1dce3fa8d9815a6db6b7bb38a2f112d4f1962
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sun Jul 16 14:45:12 2023 -0400
+
+    Do not show an error popup if application (such as browser) exits non-zero
+    
+    For example if Tor Browser or Firefox gets killed, the exit code should be handled by the calling application as per usual.
+
+commit e0f8179b64f30e7cf9e37df74311754b2e069d85
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sun Jul 16 14:31:45 2023 -0400
+
+    add error handler
+
+commit 5c20c8fbc086137bb96ae50f388777441b4e9477
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Jun 21 09:34:42 2023 +0000
+
+    bumped changelog version
+
 commit d638ddd73fac0ec8d42a6d0f2f98005e8b926793
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Wed Jun 21 09:11:29 2023 +0000

@@ -1,3 +1,21 @@
+commit 82f54003a4b429cf5f14a38df2809826ad6f25e0
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Oct 12 10:40:27 2023 -0400
+
+    refactoring environment variables loading mechanism
+
+commit 7c1fa68446498953f50b1033f3bf1085d62fce96
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Oct 12 09:52:40 2023 -0400
+
+    refactoring
+
+commit 781b72f94d063158c9d13aa7226767fc1b09102c
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Tue Aug 29 08:17:08 2023 -0400
+
+    bumped changelog version
+
 commit ed22ca4c0726d588d344ad43cd560f97899bf78c
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Tue Aug 29 08:12:58 2023 -0400

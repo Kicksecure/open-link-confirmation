@@ -7,3 +7,8 @@
 ## The Default Browser on Linux Debacle
 ## http://blog.codef00.com/2011/02/18/the-default-browser-on-linux-debacle/
 export BROWSER="/usr/libexec/open-link-confirmation/open-link-confirmation"
+
+if [ -z "$XDG_CONFIG_DIRS" ]; then
+   XDG_CONFIG_DIRS=/etc/xdg
+fi
+export XDG_CONFIG_DIRS=/usr/share/open-link-confirmation/:$XDG_CONFIG_DIRS

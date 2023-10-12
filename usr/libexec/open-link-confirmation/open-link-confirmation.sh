@@ -11,4 +11,6 @@ export BROWSER="/usr/libexec/open-link-confirmation/open-link-confirmation"
 if [ -z "$XDG_CONFIG_DIRS" ]; then
    XDG_CONFIG_DIRS=/etc/xdg
 fi
-export XDG_CONFIG_DIRS=/usr/share/open-link-confirmation/:$XDG_CONFIG_DIRS
+if ! echo "$XDG_CONFIG_DIRS" | grep --quiet /usr/share/open-link-confirmation/ ; then
+   export XDG_CONFIG_DIRS=/usr/share/open-link-confirmation/:$XDG_CONFIG_DIRS
+fi

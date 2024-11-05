@@ -8,7 +8,7 @@ developers) supports using open-link-confirmation. Shell wrappers could be
 written to support other browsers as well.
 
 On an Anonymity Gateway (when the anon-gw-base-files package is installed), it
-honors the $EDITOR environment variable (falls back to kwrite if unset), asks
+honors the $EDITOR environment variable (falls back to mousepad if unset), asks
 if a file should be opened in an editor before opening it and informs, that
 opening links on a Gateway is unsupported for security reasons.
 

@@ -1,0 +1,2 @@
+## this is intentional
+open-link-confirmation: desktop-command-not-in-package usr/bin/x-www-browser [usr/share/applications/x-www-browser.desktop]

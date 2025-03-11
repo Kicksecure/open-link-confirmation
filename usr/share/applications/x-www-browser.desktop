@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=X WWW Browser
+GenericName=Web Browser
+Exec=/usr/bin/x-www-browser %u
+Terminal=false
+Type=Application
+MimeType=x-scheme-handler/http;x-scheme-handler/https;
+NoDisplay=true

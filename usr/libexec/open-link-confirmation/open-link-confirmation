@@ -108,6 +108,13 @@ preparation() {
       ## Qubes R4.0 and above.
       qubes_type="$(qubesdb-read /type)" || true
    fi
+
+   kernel_cmdline="$(cat /proc/cmdline)"
+   if [[ "${kernel_cmdline}" =~ 'boot-role=sysmaint' ]]; then
+      in_sysmaint_mode='yes'
+   else
+      in_sysmaint_mode='no'
+   fi
 }
 
 gateway() {
@@ -191,6 +198,21 @@ qubes_redirect() {
 <br></br>input_object_stripped_and_trimmed: <code>$input_object_stripped_and_trimmed</code>
 <br></br>link_confirmation_vm_open_tool_output: <code>$link_confirmation_vm_open_tool_output</code>
 <br></br>link_confirmation_vm_open_tool_exit_code: <u>$link_confirmation_vm_open_tool_exit_code</u></p>"
+   /usr/libexec/msgcollector/generic_gui_message "error" "$title" "$msg" "$question" "$button"
+   exit 1
+}
+
+sysmaint_redirect() {
+   title="Link Confirm Open ERROR"
+   question=""
+   button="ok"
+   msg="\
+<p>The following <u>$input_type</u> could not be opened.</p>
+
+<p><code><blockquote>$input_object_stripped_and_trimmed$extra_long_link</blockquote></code></p>
+
+<p>For security reasons, opening links while booted in 'PERSISTENT mode SYSMAINT' is not supported.</p>
+<p>Please reboot into 'PERSISTENT mode USER' or 'LIVE mode USER' to browse the Web.</p>"
    /usr/libexec/msgcollector/generic_gui_message "error" "$title" "$msg" "$question" "$button"
    exit 1
 }
@@ -348,6 +370,8 @@ main_function() {
 
    if [ -f "/run/qubes/this-is-templatevm" ]; then
       qubes_redirect "$@"
+   elif [ "${in_sysmaint_mode}" = 'yes' ]; then
+      sysmaint_redirect "$@"
    elif [ -f "/usr/share/anon-gw-base-files/gateway" ]; then
       gateway "$@"
    else

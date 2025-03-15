@@ -1,3 +1,28 @@
+commit 2184cd2b59d7f14ba8034f3af403cb2539e60c67
+Merge: 7ab67b3 3fca7d8
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sat Mar 15 06:47:51 2025 -0400
+
+    Merge remote-tracking branch 'ArrayBolt3/arraybolt3/autologin'
+
+commit 3fca7d82b0c7b31b6fdea63126dd18adfee0f65c
+Author: Aaron Rainbolt <arraybolt3@ubuntu.com>
+Date:   Tue Mar 11 22:25:02 2025 -0500
+
+    Refuse to open links in sysmaint mode and show an error message if this is attempted
+
+commit 70bb632784433683160fe70da700b956a1522ba3
+Author: Aaron Rainbolt <arraybolt3@ubuntu.com>
+Date:   Mon Mar 10 23:56:31 2025 -0500
+
+    wip: hook web browser launch attempts via XDG on generic non-XFCE desktops
+
+commit 7ab67b396f667d6ae3b715ea4575b24c3f0d9f60
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Jan 23 16:26:05 2025 +0000
+
+    bumped changelog version
+
 commit 416eea4cf1862f3fbdcd0ef9a9e83137d9a11dc6
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Thu Jan 23 11:12:03 2025 -0500

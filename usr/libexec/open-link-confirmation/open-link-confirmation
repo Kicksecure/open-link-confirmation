@@ -211,8 +211,8 @@ sysmaint_redirect() {
 
 <p><code><blockquote>$input_object_stripped_and_trimmed$extra_long_link</blockquote></code></p>
 
-<p>For security reasons, opening links while booted in 'PERSISTENT mode SYSMAINT' is not supported.</p>
-<p>Please reboot into 'PERSISTENT mode USER' or 'LIVE mode USER' to browse the Web.</p>"
+<p>For security reasons, opening links while booted in 'PERSISTENT Mode - SYSMAINT Session' is not supported.</p>
+<p>Please reboot into 'PERSISTENT Mode - USER Session' or 'LIVE Mode - USER Session' to browse the Web.</p>"
    /usr/libexec/msgcollector/generic_gui_message "error" "$title" "$msg" "$question" "$button"
    exit 1
 }

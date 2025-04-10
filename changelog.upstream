@@ -1,3 +1,22 @@
+commit db87a2793bee70ff8ea8337caea7907860ae626b
+Merge: 341655a 35cc918
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Apr 10 06:13:01 2025 -0400
+
+    Merge remote-tracking branch 'ArrayBolt3/arraybolt3/rename-boot-modes'
+
+commit 35cc9180290b171816bf7e462c4de6f6ffd31679
+Author: Aaron Rainbolt <arraybolt3@ubuntu.com>
+Date:   Wed Apr 9 21:07:48 2025 -0500
+
+    Mass-change "PERSISTENCE mode USERNAME" to "PERSISTENCE Mode - USERNAME Session"
+
+commit 341655a4d0ddff14fc859ac1ae83f6224d88ede2
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sat Mar 15 10:51:49 2025 +0000
+
+    bumped changelog version
+
 commit 2184cd2b59d7f14ba8034f3af403cb2539e60c67
 Merge: 7ab67b3 3fca7d8
 Author: Patrick Schleizer <adrelanos@whonix.org>

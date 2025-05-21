@@ -4,5 +4,5 @@
 ## See the file COPYING for copying conditions.
 
 if [ -x /usr/libexec/open-link-confirmation/open-link-confirmation.sh ]; then
-   . /usr/libexec/open-link-confirmation/open-link-confirmation.sh >/dev/null 2>/dev/null
+   . /usr/libexec/open-link-confirmation/open-link-confirmation.sh || true >/dev/null 2>/dev/null
 fi

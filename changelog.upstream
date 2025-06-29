@@ -1,3 +1,22 @@
+commit 6240c3c74bce3a44b0c03999865b4127558107f3
+Merge: 3975733 b7b59d3
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sun Jun 29 13:37:57 2025 -0400
+
+    Merge remote-tracking branch 'ArrayBolt3/arraybolt3/strip-html'
+
+commit b7b59d395305cfc0885e511c3b80b70c5f49ae84
+Author: Aaron Rainbolt <arraybolt3@ubuntu.com>
+Date:   Wed Jun 25 23:32:41 2025 -0500
+
+    Port to helper-scripts strip-html
+
+commit 3975733a046b38a449a9c2c9e217d54b77d8a454
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed May 21 13:58:00 2025 +0000
+
+    bumped changelog version
+
 commit 5a55ff357dd982a5d2bf4601c7262f02d739f858
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Wed May 21 09:01:06 2025 -0400

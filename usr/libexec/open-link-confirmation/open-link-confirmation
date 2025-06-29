@@ -7,10 +7,10 @@
 set -e
 
 ## 'set -e is important'. For example if open-link-confirmation is called from
-## other applications that are confined (by AppArmor or otherwise), striphtml
+## other applications that are confined (by AppArmor or otherwise), strip-html
 ## might fail.
-# /usr/libexec/msgcollector/striphtml https://www.whonix.org
-# /usr/libexec/open-link-confirmation/open-link-confirmation: /usr/libexec/msgcollector/striphtml: /usr/bin/python3: bad interpreter: Permission denied
+# /usr/libexec/helper-scripts/strip-html https://www.whonix.org
+# /usr/libexec/open-link-confirmation/open-link-confirmation: /usr/libexec/helper-scripts/strip-html: /usr/bin/python3: bad interpreter: Permission denied
 # + input_object_stripped_and_trimmed=
 # /usr/bin/torbrowser: /usr/libexec/msgcollector/msgcollector: /bin/bash: bad interpreter: Permission denied
 # /usr/bin/torbrowser: /usr/libexec/msgcollector/msgcollector: /bin/bash: bad interpreter: Permission denied
@@ -88,7 +88,7 @@ preparation() {
    ## Trim input_object_original to 128 characters.
    input_object_trimmed="${input_object_original:0:$trim}"
 
-   input_object_stripped_and_trimmed="$(/usr/libexec/msgcollector/striphtml "$input_object_trimmed")"
+   input_object_stripped_and_trimmed="$(/usr/libexec/helper-scripts/strip-html "$input_object_trimmed")"
 
    if [ "$input_object_string_length" -gt "$trim" ]; then
       extra_long_link="<p><b>Note</b>: The address is too long, so only the first <u>$trim</u> characters are shown.</p>"

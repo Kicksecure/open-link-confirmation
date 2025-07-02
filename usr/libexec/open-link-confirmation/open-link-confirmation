@@ -7,10 +7,10 @@
 set -e
 
 ## 'set -e is important'. For example if open-link-confirmation is called from
-## other applications that are confined (by AppArmor or otherwise), strip-html
-## might fail.
-# /usr/libexec/helper-scripts/strip-html https://www.whonix.org
-# /usr/libexec/open-link-confirmation/open-link-confirmation: /usr/libexec/helper-scripts/strip-html: /usr/bin/python3: bad interpreter: Permission denied
+## other applications that are confined (by AppArmor or otherwise),
+## sanitize-string might fail.
+# /usr/bin/sanitize-string https://www.whonix.org
+# /usr/libexec/open-link-confirmation/open-link-confirmation: /usr/bin/sanitize-string: /usr/bin/python3: bad interpreter: Permission denied
 # + input_object_stripped_and_trimmed=
 # /usr/bin/torbrowser: /usr/libexec/msgcollector/msgcollector: /bin/bash: bad interpreter: Permission denied
 # /usr/bin/torbrowser: /usr/libexec/msgcollector/msgcollector: /bin/bash: bad interpreter: Permission denied
@@ -85,10 +85,8 @@ preparation() {
 
    input_object_string_length="${#input_object_original}"
 
-   ## Trim input_object_original to 128 characters.
-   input_object_trimmed="${input_object_original:0:$trim}"
-
-   input_object_stripped_and_trimmed="$(/usr/libexec/helper-scripts/strip-html "$input_object_trimmed")"
+   ## Trim input_object_original to 128 characters and sanitize.
+   input_object_stripped_and_trimmed="$(/usr/bin/sanitize-string "$input_object_original" "$trim")"
 
    if [ "$input_object_string_length" -gt "$trim" ]; then
       extra_long_link="<p><b>Note</b>: The address is too long, so only the first <u>$trim</u> characters are shown.</p>"

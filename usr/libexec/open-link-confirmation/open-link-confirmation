@@ -230,6 +230,9 @@ workstation() {
       fi
    else
       if test -e /usr/share/kicksecure/marker ; then
+         if command -v browser-choice ; then
+            [ -n "$open_in_tool_bin" ] || open_in_tool_bin="browser-choice"
+         fi
          if command -v chromium &>/dev/null ; then
             [ -n "$open_in_tool_bin" ] || open_in_tool_bin="chromium"
          fi

@@ -1,3 +1,22 @@
+commit 1095926e911f988da14ac02f16ef4329ac69c712
+Merge: abd18ed 3eb4bd5
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Tue Jul 22 03:16:18 2025 -0400
+
+    Merge remote-tracking branch 'ArrayBolt3/arraybolt3/default-browser'
+
+commit 3eb4bd5d6ac9eb9729947088f25874ddae67f839
+Author: Aaron Rainbolt <arraybolt3@ubuntu.com>
+Date:   Mon Jul 21 19:31:57 2025 -0500
+
+    Add browser-choice as a default browser if firefox and chromium are missing
+
+commit abd18edab3cee74d5d8c576caccdfc1ddae9e9a7
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Jul 2 20:51:37 2025 +0000
+
+    bumped changelog version
+
 commit ea2736a47e6cd8c228817d614bf656be9d2c952d
 Merge: 1d95192 593ea33
 Author: Patrick Schleizer <adrelanos@whonix.org>

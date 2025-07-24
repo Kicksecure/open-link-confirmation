@@ -209,8 +209,8 @@ sysmaint_redirect() {
 
 <p><code><blockquote>$input_object_stripped_and_trimmed$extra_long_link</blockquote></code></p>
 
-<p>For security reasons, opening links while booted in 'PERSISTENT Mode - SYSMAINT Session' is not supported.</p>
-<p>Please reboot into 'PERSISTENT Mode - USER Session' or 'LIVE Mode - USER Session' to browse the Web.</p>"
+<p>For security reasons, opening links while booted in '<code>PERSISTENT Mode | SYSMAINT Session</code>' is not supported.</p>
+<p>Ensure a suitable web browser is installed, then reboot into '<code>PERSISTENT Mode | USER Session</code>' or '<code>LIVE Mode | USER Session</code>' to browse the Web.</p>"
    /usr/libexec/msgcollector/generic_gui_message "error" "$title" "$msg" "$question" "$button"
    exit 1
 }
@@ -230,14 +230,22 @@ workstation() {
       fi
    else
       if test -e /usr/share/kicksecure/marker ; then
-         if command -v browser-choice ; then
-            [ -n "$open_in_tool_bin" ] || open_in_tool_bin="browser-choice"
+         if command -v brave-browser &>/dev/null ; then
+            [ -n "$open_in_tool_bin" ] || open_in_tool_bin="brave-browser"
          fi
          if command -v chromium &>/dev/null ; then
             [ -n "$open_in_tool_bin" ] || open_in_tool_bin="chromium"
          fi
          if command -v firefox &>/dev/null ; then
             [ -n "$open_in_tool_bin" ] || open_in_tool_bin="firefox"
+         fi
+         if command -v mullvad-browser &>/dev/null ; then
+            [ -n "$open_in_tool_bin" ] || open_in_tool_bin="mullvad-browser"
+         fi
+         ## Intentionally skipping torbrowser, because the command may exist
+         ## even if the browser is not installed.
+         if command -v browser-choice ; then
+            [ -n "$open_in_tool_bin" ] || open_in_tool_bin="browser-choice"
          fi
       fi
 

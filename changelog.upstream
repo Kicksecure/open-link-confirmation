@@ -1,3 +1,28 @@
+commit 7db5c5cf98ac7fc02e37c3f9885a990cc40753ea
+Merge: 3ed33d0 3c97a50
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Jul 24 02:24:05 2025 -0400
+
+    Merge remote-tracking branch 'ArrayBolt3/arraybolt3/default-browser'
+
+commit 3c97a50fc2c5bc190de3c46caafe5f5be0d21588
+Author: Aaron Rainbolt <arraybolt3@ubuntu.com>
+Date:   Tue Jul 22 21:18:57 2025 -0500
+
+    Improve sysmaint session link rejection message
+
+commit 997c4e57894c1cb8336bc5ab7db5d231d2a845a4
+Author: Aaron Rainbolt <arraybolt3@ubuntu.com>
+Date:   Tue Jul 22 20:39:07 2025 -0500
+
+    Fix browser prioritization, add Brave and Mullvad to list of candidates in alphabetical order
+
+commit 3ed33d042a4f598714a559aa486c4ae78d0e4781
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Tue Jul 22 07:26:37 2025 +0000
+
+    bumped changelog version
+
 commit 1095926e911f988da14ac02f16ef4329ac69c712
 Merge: abd18ed 3eb4bd5
 Author: Patrick Schleizer <adrelanos@whonix.org>

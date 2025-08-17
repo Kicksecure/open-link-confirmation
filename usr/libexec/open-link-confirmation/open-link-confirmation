@@ -247,6 +247,10 @@ workstation() {
          if command -v browser-choice ; then
             [ -n "$open_in_tool_bin" ] || open_in_tool_bin="browser-choice"
          fi
+      else
+        if command -v torbrowser &>/dev/null ; then
+          [ -n "$open_in_tool_bin" ] || open_in_tool_bin="torbrowser"
+        fi
       fi
 
       [ -n "$open_in_tool_bin" ] || open_in_tool_bin="x-www-browser"

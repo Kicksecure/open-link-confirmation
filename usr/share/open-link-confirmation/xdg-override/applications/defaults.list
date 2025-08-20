@@ -1,3 +1,5 @@
 [Default Applications]
 x-scheme-handler/https=x-www-browser.desktop
 x-scheme-handler/http=x-www-browser.desktop
+text/html=x-www-browser.desktop
+text/xml=x-www-browser.desktop

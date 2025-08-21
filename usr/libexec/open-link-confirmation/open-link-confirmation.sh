@@ -9,7 +9,7 @@
 export BROWSER="/usr/libexec/open-link-confirmation/open-link-confirmation"
 
 if [ -z "$XDG_CONFIG_DIRS" ]; then
-   XDG_CONFIG_DIRS="/etc/xdg"
+   XDG_CONFIG_DIRS="/etc:/etc/xdg:/usr/share"
 fi
 if [ -z "$XDG_DATA_DIRS" ]; then
    XDG_DATA_DIRS="/usr/local/share/:/usr/share/"

@@ -16,7 +16,7 @@ Package: open-link-confirmation
 Architecture: all
 Depends: sensible-utils, icon-pack-dist,
  msgcollector, xdg-utils, ${misc:Depends}
-Recommends: tb-starter, tb-updater, tb-default-browser
+Recommends: tb-starter, tb-updater
 Description: Asks for confirmation before opening links
  Asks before a link is (accidentally) opened in a browser. Links are opened in
  x-www-browser.

@@ -1,3 +1,46 @@
+commit c7e7374216d838c18c07fc58600857e9ea5d3094
+Merge: f1fee04 a23b1f7
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Aug 20 08:52:08 2025 -0400
+
+    Merge remote-tracking branch 'ArrayBolt3/arraybolt3/trixie'
+
+commit f1fee045ff260a3032b6df3f12190c44b2463353
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Aug 20 06:57:28 2025 -0400
+
+    bumped Standards-Version
+
+commit 9f0e2b011ddb8973e2c83f43e038e8994362918a
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Aug 20 06:25:34 2025 -0400
+
+    readme
+
+commit a23b1f7eb5def6b85e5570dd0a93dc531cb2ac67
+Author: Aaron Rainbolt <arraybolt3@ubuntu.com>
+Date:   Sun Aug 17 15:43:53 2025 -0500
+
+    Configure Firefox to not ask to be the default browser
+
+commit f1707c4a0bf72b3188a015f41d007a51fbc57ee3
+Author: Aaron Rainbolt <arraybolt3@ubuntu.com>
+Date:   Sat Aug 16 22:10:48 2025 -0500
+
+    Add HTML and XML mimetypes to x-www-browser, select torbrowser as default browser on Whonix-Workstation
+
+commit 796a7d09ab8e1fe5de5b773db3456e938583c69e
+Author: Aaron Rainbolt <arraybolt3@ubuntu.com>
+Date:   Tue Aug 5 22:58:04 2025 -0500
+
+    Port to Trixie.
+
+commit 5905d55bba408014fdc954224b678e737f03f744
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Jul 24 06:44:57 2025 +0000
+
+    bumped changelog version
+
 commit 7db5c5cf98ac7fc02e37c3f9885a990cc40753ea
 Merge: 3ed33d0 3c97a50
 Author: Patrick Schleizer <adrelanos@whonix.org>

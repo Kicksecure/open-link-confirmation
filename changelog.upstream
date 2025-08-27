@@ -1,3 +1,36 @@
+commit 7e3603c7aa1a1ac6e70e1877f9fd13e97d11f60b
+Merge: 2e0fb00 2c317d6
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Aug 27 04:13:17 2025 -0400
+
+    Merge remote-tracking branch 'ArrayBolt3/arraybolt3/trixie'
+
+commit 2c317d611e783f9469473573927a8d5cdd43244c
+Merge: ece2765 2e0fb00
+Author: Aaron Rainbolt <arraybolt3@ubuntu.com>
+Date:   Tue Aug 26 19:20:16 2025 -0500
+
+    Merge branch 'master' into arraybolt3/trixie
+
+commit 2e0fb00aa42bd1d2f80b264a0d2409f4490f1b24
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Tue Aug 26 09:13:11 2025 +0000
+
+    bumped changelog version
+
+commit ece2765dfc7d699c6781ee6ace66c9132eacba97
+Merge: 08bda78 c7e7374
+Author: Aaron Rainbolt <arraybolt3@ubuntu.com>
+Date:   Thu Aug 21 19:59:35 2025 -0500
+
+    Merge branch 'master' into arraybolt3/trixie
+
+commit 08bda7805ab17683eb42ee62bfe833115f09c759
+Author: Aaron Rainbolt <arraybolt3@ubuntu.com>
+Date:   Thu Aug 21 18:32:01 2025 -0500
+
+    Fix XDG handling, get rid of now-obsolete tb-default-browser
+
 commit c7e7374216d838c18c07fc58600857e9ea5d3094
 Merge: f1fee04 a23b1f7
 Author: Patrick Schleizer <adrelanos@whonix.org>

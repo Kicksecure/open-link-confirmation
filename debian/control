@@ -17,6 +17,8 @@ Architecture: all
 Depends: sensible-utils, icon-pack-dist,
  msgcollector, xdg-utils, ${misc:Depends}
 Recommends: tb-starter, tb-updater
+Breaks: tb-default-browser (<< 3:7.5-1)
+Replaces: tb-default-browser (<< 3:7.5-1)
 Description: Asks for confirmation before opening links
  Asks before a link is (accidentally) opened in a browser. Links are opened in
  x-www-browser.
@@ -32,3 +34,10 @@ Description: Asks for confirmation before opening links
  .
  This package is produced independently of, and carries no guarantee from,
  The Tor Project.
+
+Package: tb-default-browser
+Architecture: all
+Depends: open-link-confirmation, ${misc:Depends}
+Section: oldlibs
+Description: transitional package
+ This is a transitional package. It can safely be removed.

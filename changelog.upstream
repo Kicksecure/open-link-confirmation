@@ -1,3 +1,22 @@
+commit d48e63a0179a7e317fce3d6b3756e8b9ef9f590d
+Merge: dcc6b70 a09dc42
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sat Aug 30 07:47:17 2025 -0400
+
+    Merge remote-tracking branch 'ArrayBolt3/arraybolt3/trixie'
+
+commit a09dc42708350c3713789c4423a6cfe66dd044a0
+Author: Aaron Rainbolt <arraybolt3@ubuntu.com>
+Date:   Fri Aug 29 18:21:01 2025 -0500
+
+    Add tb-default-browser transitional package
+
+commit dcc6b70b1b612d251e403950728d6788f18b63d8
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Aug 27 19:28:03 2025 +0000
+
+    bumped changelog version
+
 commit 7e3603c7aa1a1ac6e70e1877f9fd13e97d11f60b
 Merge: 2e0fb00 2c317d6
 Author: Patrick Schleizer <adrelanos@whonix.org>

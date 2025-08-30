@@ -1,0 +1,19 @@
+#!/bin/bash
+
+## Copyright (C) 2012 - 2025 ENCRYPTED SUPPORT LLC <adrelanos@whonix.org>
+## See the file COPYING for copying conditions.
+
+if [ -f /usr/libexec/helper-scripts/pre.bsh ]; then
+   source /usr/libexec/helper-scripts/pre.bsh
+fi
+
+set -e
+
+## Legacy.
+update-alternatives --remove x-www-browser /usr/bin/torbrowser
+update-alternatives --remove gnome-www-browser /usr/bin/torbrowser
+
+update-alternatives --remove x-www-browser /usr/bin/whichbrowser
+update-alternatives --remove gnome-www-browser /usr/bin/whichbrowser
+
+#DEBHELPER#

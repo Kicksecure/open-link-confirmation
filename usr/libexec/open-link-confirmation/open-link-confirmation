@@ -107,12 +107,18 @@ preparation() {
       qubes_type="$(qubesdb-read /type)" || true
    fi
 
-   kernel_cmdline="$(cat /proc/cmdline)"
-   if [[ "${kernel_cmdline}" =~ 'boot-role=sysmaint' ]]; then
-      in_sysmaint_mode='yes'
-   else
-      in_sysmaint_mode='no'
-   fi
+  kernel_cmdline=''
+  if [ -f /proc/cmdline ]; then
+    kernel_cmdline="$(cat -- /proc/cmdline)"
+  elif [ -f /proc/1/cmdline ]; then
+    kernel_cmdline="$(cat -- /proc/1/cmdline)"
+  fi
+
+  if [[ "${kernel_cmdline}" =~ 'boot-role=sysmaint' ]]; then
+    in_sysmaint_mode='yes'
+  else
+    in_sysmaint_mode='no'
+  fi
 }
 
 gateway() {

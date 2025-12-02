@@ -86,7 +86,7 @@ preparation() {
    input_object_string_length="${#input_object_original}"
 
    ## Trim input_object_original to 128 characters and sanitize.
-   input_object_stripped_and_trimmed="$(/usr/bin/sanitize-string "$input_object_original" "$trim")"
+   input_object_stripped_and_trimmed="$(/usr/bin/sanitize-string -- "$trim" "$input_object_original")"
 
    if [ "$input_object_string_length" -gt "$trim" ]; then
       extra_long_link="<p><b>Note</b>: The address is too long, so only the first <u>$trim</u> characters are shown.</p>"

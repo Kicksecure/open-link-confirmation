@@ -1,3 +1,22 @@
+commit da0bf5ec56ed08db3406be4ba60b988fd350d948
+Merge: bda5e2f 3f2336d
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Tue Dec 2 04:39:10 2025 -0500
+
+    Merge remote-tracking branch 'ArrayBolt3/arraybolt3/trixie'
+
+commit 3f2336dd3c5b7e5d83bb27e12ddcf41b20a9e741
+Author: Aaron Rainbolt <arraybolt3@ubuntu.com>
+Date:   Mon Dec 1 20:30:00 2025 -0600
+
+    Adjust to new sanitize-string API
+
+commit bda5e2fb4721c85e24bf64bb1af50b6796b4ce7c
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sun Oct 26 12:30:02 2025 +0000
+
+    bumped changelog version
+
 commit c7b9a19000123179de2551d9e330490a56e26e9a
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Sun Oct 26 08:05:50 2025 -0400

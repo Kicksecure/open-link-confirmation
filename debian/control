@@ -35,9 +35,9 @@ Description: confirmation dialog before opening links or files
   * On Whonix-Gateway (anon-gw-base-files installed), opening of links is
     blocked for security reasons. Local files are instead opened in the text
     editor defined by $EDITOR (defaulting to FeatherPad or Mousepad).
-  * Under Qubes OS, integrates with qvm-open-in-dvm for secure link opening
-    in disposable VMs. Handles refusal responses and displays informative
-    error dialogs.
+  * In Qubes OS Template, integrates with qvm-open-in-dvm for secure link
+    opening in disposable VMs. Handles refusal responses and displays
+    informative error dialogs.
   * When booted in "sysmaint" (system maintenance) mode, link opening is
     refused to avoid network activity during administrative sessions.
  .

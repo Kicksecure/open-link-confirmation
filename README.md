@@ -1,16 +1,38 @@
-# Asks for confirmation before opening links #
+# confirmation dialog before opening links or files #
 
-Asks before a link is (accidentally) opened in a browser. Links are opened in
-x-www-browser.
+Provides a safety wrapper for opening URLs or files. Prompts the user for
+confirmation before launching the associated application, to prevent
+accidental or unsafe link openings.
 
-Currently only the Tor Browser starter from the tb-starter package (by Whonix
-developers) supports using open-link-confirmation. Shell wrappers could be
-written to support other browsers as well.
+Integrates with msgcollector to display graphical confirmation and error
+dialogs. Uses helper-scripts' sanitize-string to strip potentially malicious
+Unicode or HTML input, trims displayed addresses to 128 characters, and logs
+diagnostic information through msgcollector.
 
-On an Anonymity Gateway (when the anon-gw-base-files package is installed), it
-honors the $EDITOR environment variable (falls back to mousepad if unset), asks
-if a file should be opened in an editor before opening it and informs, that
-opening links on a Gateway is unsupported for security reasons.
+Detects execution context:
+* On Kicksecure and Whonix-Workstation systems, links can be opened after
+explicit confirmation in a supported browser.
+* On Whonix-Gateway (anon-gw-base-files installed), opening of links is
+blocked for security reasons. Local files are instead opened in the text
+editor defined by $EDITOR (defaulting to FeatherPad or Mousepad).
+* In Qubes OS Template, integrates with qvm-open-in-dvm for secure link
+opening in disposable VMs. Handles refusal responses and displays
+informative error dialogs.
+* When booted in "sysmaint" (system maintenance) mode, link opening is
+refused to avoid network activity during administrative sessions.
+
+Automatically detects and uses installed browsers such as:
+brave-browser, chromium, firefox, mullvad-browser, browser-choice,
+or torbrowser (Whonix starter wrapper). Falls back to x-www-browser if
+none of the above are available.
+
+Provides infinite recursion protection to prevent self-invocation loops,
+sets environment variables (OPEN_LINK_CONFIRMATION, OPEN_LINK_CONFIRMATION_COUNTER),
+and adjusts XDG_CONFIG_DIRS and XDG_DATA_DIRS to register itself as a
+compliant XDG handler and default $BROWSER.
+
+Designed for security-focused environments such as Kicksecure, Whonix,
+and Qubes OS.
 
 This package is produced independently of, and carries no guarantee from,
 The Tor Project.

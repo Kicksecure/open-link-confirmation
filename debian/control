@@ -20,17 +20,29 @@ Recommends: tb-starter, tb-updater
 Breaks: tb-default-browser (<< 3:7.5-1)
 Replaces: tb-default-browser (<< 3:7.5-1)
 Description: Asks for confirmation before opening links
- Asks before a link is (accidentally) opened in a browser. Links are opened in
- x-www-browser.
+ Asks before a link is (accidentally) opened in a browser.
  .
  Currently only the Tor Browser starter from the tb-starter package (by Whonix
- developers) supports using open-link-confirmation. Shell wrappers could be
- written to support other browsers as well.
+ developers) supports using open-link-confirmation.
+
+ Supported browsers include brave-browser, chromium, firefox, mullvad-browser,
+ browser-choice, torbrowser (shell starter wrapper by Whonix developer).
+ Otherwise falls back to x-www-browser.
+ .
+ Support for additional browser could be easily added.
  .
  On an Anonymity Gateway (when the anon-gw-base-files package is installed), it
  honors the $EDITOR environment variable (falls back to mousepad if unset), asks
  if a file should be opened in an editor before opening it and informs, that
  opening links on a Gateway is unsupported for security reasons.
+ .
+ Shortens excessively links to 128 characters and sanitizes potentially malicious
+ unicode and HTML using `sanitize-string` (which is provided by the helper-scripts
+ package).
+ .
+ Sets itself up as default BROWSER environment variable. Extends the
+ XDG_CONFIG_DIRS and XDG_DATA_DIRS environment variables to configure XDG scheme
+ handlers.
  .
  This package is produced independently of, and carries no guarantee from,
  The Tor Project.

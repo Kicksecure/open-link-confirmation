@@ -42,6 +42,8 @@ exit_code: <code>$exit_code</code>"
    exit 1
 }
 
+source /usr/libexec/helper-scripts/has.sh
+
 source_config() {
    shopt -s nullglob
    local i
@@ -130,8 +132,17 @@ gateway() {
       #open_in_tool_bin="?"
       #open_in_tool_bin_name="?"
    else
-      open_in_tool_bin="mousepad"
-      open_in_tool_bin_name="Mousepad"
+      if has featherpad; then
+         open_in_tool_bin="featherpad"
+         open_in_tool_bin_name="FeatherPad"
+      elif has mousepad; then
+        open_in_tool_bin="mousepad"
+        open_in_tool_bin_name="Mousepad"
+      else
+         ## TODO: implement better fallback
+         open_in_tool_bin="featherpad"
+         open_in_tool_bin_name="FeatherPad"
+      fi
    fi
 
    [ -n "$tb_title" ] || tb_title="Tor Browser"

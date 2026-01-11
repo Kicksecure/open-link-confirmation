@@ -19,30 +19,40 @@ Depends: sensible-utils, icon-pack-dist,
 Recommends: tb-starter, tb-updater
 Breaks: tb-default-browser (<< 3:7.5-1)
 Replaces: tb-default-browser (<< 3:7.5-1)
-Description: Asks for confirmation before opening links
- Asks before a link is (accidentally) opened in a browser.
+Description: confirmation dialog before opening links or files
+ Provides a safety wrapper for opening URLs or files. Prompts the user for
+ confirmation before launching the associated application, to prevent
+ accidental or unsafe link openings.
  .
- Currently only the Tor Browser starter from the tb-starter package (by Whonix
- developers) supports using open-link-confirmation.
-
- Supported browsers include brave-browser, chromium, firefox, mullvad-browser,
- browser-choice, torbrowser (shell starter wrapper by Whonix developer).
- Otherwise falls back to x-www-browser.
+ Integrates with msgcollector to display graphical confirmation and error
+ dialogs. Uses helper-scripts' sanitize-string to strip potentially malicious
+ Unicode or HTML input, trims displayed addresses to 128 characters, and logs
+ diagnostic information through msgcollector.
  .
- Support for additional browser could be easily added.
+ Detects execution context:
+  * On Kicksecure and Whonix-Workstation systems, links can be opened after
+    explicit confirmation in a supported browser.
+  * On Whonix-Gateway (anon-gw-base-files installed), opening of links is
+    blocked for security reasons. Local files are instead opened in the text
+    editor defined by $EDITOR (defaulting to FeatherPad or Mousepad).
+  * Under Qubes OS, integrates with qvm-open-in-dvm for secure link opening
+    in disposable VMs. Handles refusal responses and displays informative
+    error dialogs.
+  * When booted in "sysmaint" (system maintenance) mode, link opening is
+    refused to avoid network activity during administrative sessions.
  .
- On an Anonymity Gateway (when the anon-gw-base-files package is installed), it
- honors the $EDITOR environment variable (falls back to mousepad if unset), asks
- if a file should be opened in an editor before opening it and informs, that
- opening links on a Gateway is unsupported for security reasons.
+ Automatically detects and uses installed browsers such as:
+  brave-browser, chromium, firefox, mullvad-browser, browser-choice,
+  or torbrowser (Whonix starter wrapper). Falls back to x-www-browser if
+  none of the above are available.
  .
- Shortens excessively links to 128 characters and sanitizes potentially malicious
- unicode and HTML using `sanitize-string` (which is provided by the helper-scripts
- package).
+ Provides infinite recursion protection to prevent self-invocation loops,
+ sets environment variables (OPEN_LINK_CONFIRMATION, OPEN_LINK_CONFIRMATION_COUNTER),
+ and adjusts XDG_CONFIG_DIRS and XDG_DATA_DIRS to register itself as a
+ compliant XDG handler and default $BROWSER.
  .
- Sets itself up as default BROWSER environment variable. Extends the
- XDG_CONFIG_DIRS and XDG_DATA_DIRS environment variables to configure XDG scheme
- handlers.
+ Designed for security-focused environments such as Kicksecure, Whonix,
+ and Qubes OS.
  .
  This package is produced independently of, and carries no guarantee from,
  The Tor Project.

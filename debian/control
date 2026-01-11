@@ -47,9 +47,10 @@ Description: confirmation dialog before opening links or files
   none of the above are available.
  .
  Provides infinite recursion protection to prevent self-invocation loops,
- sets environment variables (OPEN_LINK_CONFIRMATION, OPEN_LINK_CONFIRMATION_COUNTER),
- and adjusts XDG_CONFIG_DIRS and XDG_DATA_DIRS to register itself as a
- compliant XDG handler and default $BROWSER.
+ sets environment variables (OPEN_LINK_CONFIRMATION,
+ OPEN_LINK_CONFIRMATION_COUNTER), and adjusts XDG_CONFIG_DIRS and
+ XDG_DATA_DIRS to register itself as a compliant XDG handler and default
+ $BROWSER.
  .
  Designed for security-focused environments such as Kicksecure, Whonix,
  and Qubes OS.

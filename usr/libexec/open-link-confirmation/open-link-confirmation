@@ -16,10 +16,23 @@ set -e
 # /usr/bin/torbrowser: /usr/libexec/msgcollector/msgcollector: /bin/bash: bad interpreter: Permission denied
 # /usr/bin/torbrowser: /usr/libexec/msgcollector/msgcollector: /bin/bash: bad interpreter: Permission denied
 
+html_escape() {
+   local str="$1"
+   str="${str//&/&amp;}"
+   str="${str//</&lt;}"
+   str="${str//>/&gt;}"
+   str="${str//\"/&quot;}"
+   str="${str//\'/&#39;}"
+   printf '%s' "$str"
+}
+
 trap "error_handler" ERR
 
 error_handler() {
    local exit_code="$?"
+
+   local bash_command_escaped
+   bash_command_escaped="$(html_escape "$BASH_COMMAND")"
 
    local MSG="$0 script bug.
 
@@ -28,7 +41,7 @@ Try again later. If this is a transient issue, it can be safely ignored.
 
 Debugging information:
 
-BASH_COMMAND: <code>$BASH_COMMAND</code>
+BASH_COMMAND: <code>$bash_command_escaped</code>
 exit_code: <code>$exit_code</code>"
 
    MSG="$(/usr/libexec/msgcollector/br_add "$MSG")"
@@ -146,7 +159,7 @@ gateway() {
       #msg="$input_object_original will be opened in $open_in_tool_bin_name. Continue?"
 
       open_in_tool_exit_code="0"
-      $open_in_tool_bin $open_in_tool_extra_opts "$input_object_original" >/dev/null 2>/dev/null || { open_in_tool_exit_code="$?" ; true; };
+      "$open_in_tool_bin" $open_in_tool_extra_opts "$input_object_original" >/dev/null 2>/dev/null || { open_in_tool_exit_code="$?" ; true; };
       exit "$open_in_tool_exit_code"
    fi
 
@@ -174,7 +187,7 @@ qubes_redirect() {
    [ -n "$link_confirmation_vm_open_tool" ] || link_confirmation_vm_open_tool="qvm-open-in-dvm"
 
    link_confirmation_vm_open_tool_exit_code="0"
-   link_confirmation_vm_open_tool_output="$($link_confirmation_vm_open_tool "$input_object_original" 2>&1)" \
+   link_confirmation_vm_open_tool_output="$("$link_confirmation_vm_open_tool" "$input_object_original" 2>&1)" \
       || { link_confirmation_vm_open_tool_exit_code="$?" ; true; };
 
    if [ "$link_confirmation_vm_open_tool_exit_code" = "0" ]; then
@@ -185,6 +198,11 @@ qubes_redirect() {
       ## Qubes 'no' clicked.
       exit 0
    fi
+
+   local vm_open_tool_escaped
+   vm_open_tool_escaped="$(html_escape "$link_confirmation_vm_open_tool")"
+   local vm_open_tool_output_escaped
+   vm_open_tool_output_escaped="$(html_escape "$link_confirmation_vm_open_tool_output")"
 
    title="Link Confirm Open ERROR"
    question=""
@@ -198,9 +216,9 @@ qubes_redirect() {
 <p>Use $tb_title under Workstation to browse the internet.</p>
 
 <p>Debugging information:
-<br></br>link_confirmation_vm_open_tool: <code>$link_confirmation_vm_open_tool</code>
+<br></br>link_confirmation_vm_open_tool: <code>$vm_open_tool_escaped</code>
 <br></br>input_object_stripped_and_trimmed: <code>$input_object_stripped_and_trimmed</code>
-<br></br>link_confirmation_vm_open_tool_output: <code>$link_confirmation_vm_open_tool_output</code>
+<br></br>link_confirmation_vm_open_tool_output: <code>$vm_open_tool_output_escaped</code>
 <br></br>link_confirmation_vm_open_tool_exit_code: <u>$link_confirmation_vm_open_tool_exit_code</u></p>"
    /usr/libexec/msgcollector/generic_gui_message "error" "$title" "$msg" "$question" "$button"
    exit 1
@@ -359,7 +377,7 @@ final() {
       fi
    fi
 
-   if ! command -v $open_in_tool_bin >/dev/null 2>/dev/null ; then
+   if ! command -v "$open_in_tool_bin" >/dev/null 2>/dev/null ; then
       local question=""
       local button="ok"
       local msg="<p><b><u>ERROR</b></u>: <b>$open_in_tool_bin</b> does not exist! Please report this bug!</p>"
@@ -369,7 +387,7 @@ final() {
 
    local open_in_tool_exit_code
    open_in_tool_exit_code="0"
-   DE=generic $open_in_tool_bin $open_in_tool_extra_opts "$@" >/dev/null 2>/dev/null || { open_in_tool_exit_code="$?" ; true; };
+   DE=generic "$open_in_tool_bin" $open_in_tool_extra_opts "$@" >/dev/null 2>/dev/null || { open_in_tool_exit_code="$?" ; true; };
 
    ## Do not show an error popup.
    ## For example if Tor Browser or Firefox gets killed, the exit code should be handled by the calling application as per usual.

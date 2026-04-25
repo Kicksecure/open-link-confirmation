@@ -15,7 +15,7 @@ Rules-Requires-Root: no
 Package: open-link-confirmation
 Architecture: all
 Depends: sensible-utils, icon-pack-dist,
- msgcollector, xdg-utils, ${misc:Depends}
+ msgcollector, xdg-utils, helper-scripts, ${misc:Depends}
 Recommends: tb-starter, tb-updater
 Breaks: tb-default-browser (<< 3:7.5-1)
 Replaces: tb-default-browser (<< 3:7.5-1)

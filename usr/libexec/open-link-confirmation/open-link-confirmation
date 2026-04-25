@@ -16,6 +16,9 @@ set -e
 # /usr/bin/torbrowser: /usr/libexec/msgcollector/msgcollector: /bin/bash: bad interpreter: Permission denied
 # /usr/bin/torbrowser: /usr/libexec/msgcollector/msgcollector: /bin/bash: bad interpreter: Permission denied
 
+# shellcheck source=../../../../helper-scripts/usr/libexec/helper-scripts/strings.bsh
+source /usr/libexec/helper-scripts/strings.bsh
+
 trap "error_handler" ERR
 
 error_handler() {
@@ -59,8 +62,8 @@ source_config() {
 
 preparation() {
    ## Infinite loop protection.
-   [ -n "$OPEN_LINK_CONFIRMATION_MAXIMUM" ] || OPEN_LINK_CONFIRMATION_MAXIMUM="5"
-   [ -n "$OPEN_LINK_CONFIRMATION_COUNTER" ] || OPEN_LINK_CONFIRMATION_COUNTER="0"
+   is_whole_number "$OPEN_LINK_CONFIRMATION_MAXIMUM" || OPEN_LINK_CONFIRMATION_MAXIMUM="5"
+   is_whole_number "$OPEN_LINK_CONFIRMATION_COUNTER" || OPEN_LINK_CONFIRMATION_COUNTER="0"
    OPEN_LINK_CONFIRMATION_COUNTER=$(( OPEN_LINK_CONFIRMATION_COUNTER + 1 ))
    export OPEN_LINK_CONFIRMATION_COUNTER
    if [ "$OPEN_LINK_CONFIRMATION_COUNTER" -ge "$OPEN_LINK_CONFIRMATION_MAXIMUM" ]; then

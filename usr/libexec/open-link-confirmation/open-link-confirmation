@@ -3,10 +3,14 @@
 ## Copyright (C) 2012 - 2025 ENCRYPTED SUPPORT LLC <adrelanos@whonix.org>
 ## See the file COPYING for copying conditions.
 
-#set -x
-set -e
+set -o errexit
+set -o nounset
+set -o pipefail
+set -o errtrace
+shopt -s inherit_errexit
+shopt -s shift_verbose
 
-## 'set -e is important'. For example if open-link-confirmation is called from
+## 'errexit is important'. For example if open-link-confirmation is called from
 ## other applications that are confined (by AppArmor or otherwise),
 ## sanitize-string might fail.
 # /usr/bin/sanitize-string https://www.whonix.org
@@ -16,39 +20,83 @@ set -e
 # /usr/bin/torbrowser: /usr/libexec/msgcollector/msgcollector: /bin/bash: bad interpreter: Permission denied
 # /usr/bin/torbrowser: /usr/libexec/msgcollector/msgcollector: /bin/bash: bad interpreter: Permission denied
 
+## Supplied by the caller's environment, by an /etc/open_link_confirm.d config
+## file, or by one branch of this script and read in another. Any of them can
+## legitimately be absent, so give them a defined value here rather than let a
+## bare read abort the dialog under nounset. The '[ -n ... ] ||' defaults below
+## stay as they are: they also replace an EXPLICITLY EMPTY value, which
+## '[ -v ... ]' does not.
+[ -v EDITOR ] || EDITOR=""
+[ -v OPEN_LINK_CONFIRMATION_COUNTER ] || OPEN_LINK_CONFIRMATION_COUNTER=""
+[ -v OPEN_LINK_CONFIRMATION_MAXIMUM ] || OPEN_LINK_CONFIRMATION_MAXIMUM=""
+[ -v extra_long_link ] || extra_long_link=""
+[ -v in_sysmaint_mode ] || in_sysmaint_mode=""
+[ -v input_object_original ] || input_object_original=""
+[ -v input_object_stripped_and_trimmed ] || input_object_stripped_and_trimmed=""
+[ -v input_type ] || input_type=""
+[ -v is_file ] || is_file=""
+[ -v link_confirmation_for_files ] || link_confirmation_for_files=""
+[ -v link_confirmation_for_links ] || link_confirmation_for_links=""
+[ -v link_confirmation_vm_open_tool ] || link_confirmation_vm_open_tool=""
+[ -v open_in_tool_bin ] || open_in_tool_bin=""
+[ -v open_in_tool_bin_name ] || open_in_tool_bin_name=""
+[ -v open_in_tool_bin_name_readlink ] || open_in_tool_bin_name_readlink=""
+[ -v open_in_tool_extra_opts ] || open_in_tool_extra_opts=""
+[ -v qubes_detected ] || qubes_detected=""
+[ -v qubes_type ] || qubes_type=""
+[ -v skip_open_link_confirmation ] || skip_open_link_confirmation=""
+[ -v tb_title ] || tb_title=""
+[ -v button ] || button=""
+[ -v msg ] || msg=""
+[ -v question ] || question=""
+[ -v title ] || title=""
+
+## shellcheck cannot follow this in an isolated single-repo checkout, where
+## helper-scripts is not a sibling; the source= path documents where the file
+## lives in the derivative-maker tree.
 # shellcheck source=../../../../helper-scripts/usr/libexec/helper-scripts/strings.bsh
+# shellcheck disable=SC1091
 source /usr/libexec/helper-scripts/strings.bsh
 
-trap "error_handler" ERR
-
+## Reached only through the ERR trap below, which shellcheck does not connect
+## to this definition in this file.
+# shellcheck disable=SC2317
 error_handler() {
+   ## Must stay the first statement and keep its initialiser: a bare 'local
+   ## exit_code' would run the 'local' builtin first and reset $? to 0.
    local exit_code="$?"
+   local error_message error_title error_question error_button error_body
 
    ## sanitize-string may fail (e.g. AppArmor-confined caller, see file header).
    ## Tolerate it with '|| true' so this ERR trap still shows its dialog instead
-   ## of aborting / re-entering under 'set -e'.
-   local MSG
-   MSG="$0 script bug.
+   ## of aborting / re-entering under 'errexit'.
+   error_message="${0} script bug.
 
 No panic. Nothing is broken. Just some rare condition has been hit.
 Try again later. If this is a transient issue, it can be safely ignored.
 
 Debugging information:
 
-BASH_COMMAND: <code>$(sanitize-string -- 255 "$BASH_COMMAND" || true)</code>
-exit_code: <code>$exit_code</code>"
+BASH_COMMAND: <code>$(sanitize-string -- 255 "${BASH_COMMAND}" || true)</code>
+exit_code: <code>${exit_code}</code>"
 
-   MSG="$(/usr/libexec/msgcollector/br_add.py "$MSG")"
+   error_message="$(/usr/libexec/msgcollector/br_add.py "${error_message}")"
 
-   local title="open-link-confirmation bug"
-   local question=""
-   local button="ok"
-   local msg="<p>$MSG</p>"
-   /usr/libexec/msgcollector/generic_gui_message.py "error" "$title" "$msg" "$question" "$button"
+   error_title="open-link-confirmation bug"
+   error_question=""
+   error_button="ok"
+   error_body="<p>${error_message}</p>"
+   /usr/libexec/msgcollector/generic_gui_message.py "error" "${error_title}" "${error_body}" "${error_question}" "${error_button}"
 
    exit 1
 }
 
+## Registered after the definition so shellcheck can see the handler is
+## used; nothing runs in between, so the coverage is unchanged.
+trap error_handler ERR
+
+# shellcheck source=../../../../helper-scripts/usr/libexec/helper-scripts/has.sh
+# shellcheck disable=SC1091
 source /usr/libexec/helper-scripts/has.sh
 
 source_config() {
@@ -57,41 +105,46 @@ source_config() {
    ## configuration files are sourced, then restore them afterwards so the
    ## environment wins over the on-disk defaults.
    local link_confirmation_for_links_env link_confirmation_for_files_env
-   link_confirmation_for_links_env="${link_confirmation_for_links:-}"
-   link_confirmation_for_files_env="${link_confirmation_for_files:-}"
+   local config_file
+
+   link_confirmation_for_links_env="${link_confirmation_for_links}"
+   link_confirmation_for_files_env="${link_confirmation_for_files}"
 
    shopt -s nullglob
-   local i
-   for i in \
+   for config_file in \
       /etc/open_link_confirm.d/*.conf \
       /usr/local/etc/open_link_confirm.d/*.conf \
       ; do
       ## TODO
-      bash -n "$i" || exit 1
-      source "$i"
+      bash -n "${config_file}" || exit 1
+      ## Dynamic path from the glob above; R-081 prescribes SC1090 here.
+      # shellcheck disable=SC1090
+      source "${config_file}"
    done
 
-   if [ -n "$link_confirmation_for_links_env" ]; then
-      link_confirmation_for_links="$link_confirmation_for_links_env"
+   if [ -n "${link_confirmation_for_links_env}" ]; then
+      link_confirmation_for_links="${link_confirmation_for_links_env}"
    fi
-   if [ -n "$link_confirmation_for_files_env" ]; then
-      link_confirmation_for_files="$link_confirmation_for_files_env"
+   if [ -n "${link_confirmation_for_files_env}" ]; then
+      link_confirmation_for_files="${link_confirmation_for_files_env}"
    fi
 }
 
 preparation() {
+   local trim input_object_string_length kernel_cmdline
+
    ## Infinite loop protection.
-   is_whole_number "$OPEN_LINK_CONFIRMATION_MAXIMUM" || OPEN_LINK_CONFIRMATION_MAXIMUM="5"
-   is_whole_number "$OPEN_LINK_CONFIRMATION_COUNTER" || OPEN_LINK_CONFIRMATION_COUNTER="0"
+   is_whole_number "${OPEN_LINK_CONFIRMATION_MAXIMUM}" || OPEN_LINK_CONFIRMATION_MAXIMUM="5"
+   is_whole_number "${OPEN_LINK_CONFIRMATION_COUNTER}" || OPEN_LINK_CONFIRMATION_COUNTER="0"
    OPEN_LINK_CONFIRMATION_COUNTER=$(( OPEN_LINK_CONFIRMATION_COUNTER + 1 ))
    export OPEN_LINK_CONFIRMATION_COUNTER
-   if [ "$OPEN_LINK_CONFIRMATION_COUNTER" -ge "$OPEN_LINK_CONFIRMATION_MAXIMUM" ]; then
-      echo "$0: ERROR: recursively called more than $OPEN_LINK_CONFIRMATION_MAXIMUM times!" >&2
+   if [ "${OPEN_LINK_CONFIRMATION_COUNTER}" -ge "${OPEN_LINK_CONFIRMATION_MAXIMUM}" ]; then
+      printf '%s\n' "${0}: ERROR: recursively called more than ${OPEN_LINK_CONFIRMATION_MAXIMUM} times!" >&2
       title="Link Confirm Open ERROR"
-      msg="<p>Recursively called more than $OPEN_LINK_CONFIRMATION_MAXIMUM times, maybe because no browser is installed, that supports open-link-confirmation.</p>"
+      msg="<p>Recursively called more than ${OPEN_LINK_CONFIRMATION_MAXIMUM} times, maybe because no browser is installed, that supports open-link-confirmation.</p>"
       question=""
       button="ok"
-      /usr/libexec/msgcollector/generic_gui_message.py "error" "$title" "$msg" "$question" "$button"
+      /usr/libexec/msgcollector/generic_gui_message.py "error" "${title}" "${msg}" "${question}" "${button}"
       exit 211
    fi
 
@@ -110,13 +163,13 @@ preparation() {
    input_object_string_length="${#input_object_original}"
 
    ## Trim input_object_original to 128 characters and sanitize.
-   input_object_stripped_and_trimmed="$(/usr/bin/sanitize-string -- "$trim" "$input_object_original")"
+   input_object_stripped_and_trimmed="$(/usr/bin/sanitize-string -- "${trim}" "${input_object_original}")"
 
-   if [ "$input_object_string_length" -gt "$trim" ]; then
-      extra_long_link="<p><b>Note</b>: The address is too long, so only the first <u>$trim</u> characters are shown.</p>"
+   if [ "${input_object_string_length}" -gt "${trim}" ]; then
+      extra_long_link="<p><b>Note</b>: The address is too long, so only the first <u>${trim}</u> characters are shown.</p>"
    fi
 
-   if [ -f "$input_object_original" ]; then
+   if [ -f "${input_object_original}" ]; then
       is_file="1"
       input_type="file"
    else
@@ -146,9 +199,11 @@ preparation() {
 }
 
 gateway() {
-   if [ ! "$EDITOR" = "" ]; then
-      open_in_tool_bin="$EDITOR"
-      open_in_tool_bin_name="\$EDITOR $EDITOR"
+   local open_in_tool_exit_code
+
+   if [ ! "${EDITOR}" = "" ]; then
+      open_in_tool_bin="${EDITOR}"
+      open_in_tool_bin_name="\$EDITOR ${EDITOR}"
    ## What other useful condition could we check to determine the default editor?
    #elif [ "1" = "2" ]; then
       #open_in_tool_bin="?"
@@ -167,11 +222,11 @@ gateway() {
       fi
    fi
 
-   [ -n "$tb_title" ] || tb_title="Tor Browser"
+   [ -n "${tb_title}" ] || tb_title="Tor Browser"
 
    open_in_tool_extra_opts=""
 
-   if [ "$is_file" = "1" ]; then
+   if [ "${is_file}" = "1" ]; then
       ## Open files on gateway without confirmation.
 
       ## We could easily change our mind and ask for confirmation.
@@ -179,8 +234,13 @@ gateway() {
       #msg="$input_object_original will be opened in $open_in_tool_bin_name. Continue?"
 
       open_in_tool_exit_code="0"
-      "$open_in_tool_bin" $open_in_tool_extra_opts "$input_object_original" >/dev/null 2>/dev/null || { open_in_tool_exit_code="$?" ; true; };
-      exit "$open_in_tool_exit_code"
+      ## Deliberately unquoted: open_in_tool_extra_opts carries zero or more
+      ## separate options, so the shell must split it into words. Quoting it
+      ## would pass one empty argument to the editor.
+      # shellcheck disable=SC2086
+      "${open_in_tool_bin}" ${open_in_tool_extra_opts} "${input_object_original}" >/dev/null 2>/dev/null \
+         || open_in_tool_exit_code="$?"
+      exit "${open_in_tool_exit_code}"
    fi
 
    ## Does not work.
@@ -194,48 +254,58 @@ gateway() {
 
    title="Link Confirm Open ERROR"
    msg="<p>Link Confirm Open does not support opening links on Gateway for security reasons.</p>
-<p>Use $tb_title under Workstation to browse the internet.</p>"
+<p>Use ${tb_title} under Workstation to browse the internet.</p>"
    question=""
    button="ok"
-   /usr/libexec/msgcollector/generic_gui_message.py "error" "$title" "$msg" "$question" "$button"
+   /usr/libexec/msgcollector/generic_gui_message.py "error" "${title}" "${msg}" "${question}" "${button}"
    exit 0
 }
 
 qubes_redirect() {
+   local vm_name link_confirmation_vm_open_tool_exit_code
+   local link_confirmation_vm_open_tool_output
+   local sanitized_open_tool sanitized_open_tool_output
+
+   ## Read for its failure, not its value: on a Qubes VM without a working
+   ## qubesdb this aborts before an open is attempted.
+   # shellcheck disable=SC2034
    vm_name="$(qubesdb-read /name)"
 
-   [ -n "$link_confirmation_vm_open_tool" ] || link_confirmation_vm_open_tool="qvm-open-in-dvm"
+   [ -n "${link_confirmation_vm_open_tool}" ] || link_confirmation_vm_open_tool="qvm-open-in-dvm"
 
    link_confirmation_vm_open_tool_exit_code="0"
-   link_confirmation_vm_open_tool_output="$("$link_confirmation_vm_open_tool" "$input_object_original" 2>&1)" \
-      || { link_confirmation_vm_open_tool_exit_code="$?" ; true; };
+   link_confirmation_vm_open_tool_output="$("${link_confirmation_vm_open_tool}" "${input_object_original}" 2>&1)" \
+      || link_confirmation_vm_open_tool_exit_code="$?"
 
-   if [ "$link_confirmation_vm_open_tool_exit_code" = "0" ]; then
+   if [ "${link_confirmation_vm_open_tool_exit_code}" = "0" ]; then
       exit 0
    fi
 
-   if [ "$link_confirmation_vm_open_tool_output" = "Request refused" ]; then
+   if [ "${link_confirmation_vm_open_tool_output}" = "Request refused" ]; then
       ## Qubes 'no' clicked.
       exit 0
    fi
+
+   sanitized_open_tool="$(sanitize-string -- 255 "${link_confirmation_vm_open_tool}")"
+   sanitized_open_tool_output="$(sanitize-string -- 255 "${link_confirmation_vm_open_tool_output}")"
 
    title="Link Confirm Open ERROR"
    question=""
    button="ok"
    msg="\
-<p>The following <u>$input_type</u> could not be opened.</p>
+<p>The following <u>${input_type}</u> could not be opened.</p>
 
-<p><code><blockquote>$input_object_stripped_and_trimmed$extra_long_link</blockquote></code></p>
+<p><code><blockquote>${input_object_stripped_and_trimmed}${extra_long_link}</blockquote></code></p>
 
 <p>Please copy the link to the Workstation and open it there.</p>
-<p>Use $tb_title under Workstation to browse the internet.</p>
+<p>Use ${tb_title} under Workstation to browse the internet.</p>
 
 <p>Debugging information:
-<br></br>link_confirmation_vm_open_tool: <code>$(sanitize-string -- 255 "$link_confirmation_vm_open_tool")</code>
-<br></br>input_object_stripped_and_trimmed: <code>$input_object_stripped_and_trimmed</code>
-<br></br>link_confirmation_vm_open_tool_output: <code>$(sanitize-string -- 255 "$link_confirmation_vm_open_tool_output")</code>
-<br></br>link_confirmation_vm_open_tool_exit_code: <u>$link_confirmation_vm_open_tool_exit_code</u></p>"
-   /usr/libexec/msgcollector/generic_gui_message.py "error" "$title" "$msg" "$question" "$button"
+<br></br>link_confirmation_vm_open_tool: <code>${sanitized_open_tool}</code>
+<br></br>input_object_stripped_and_trimmed: <code>${input_object_stripped_and_trimmed}</code>
+<br></br>link_confirmation_vm_open_tool_output: <code>${sanitized_open_tool_output}</code>
+<br></br>link_confirmation_vm_open_tool_exit_code: <u>${link_confirmation_vm_open_tool_exit_code}</u></p>"
+   /usr/libexec/msgcollector/generic_gui_message.py "error" "${title}" "${msg}" "${question}" "${button}"
    exit 1
 }
 
@@ -244,165 +314,177 @@ sysmaint_redirect() {
    question=""
    button="ok"
    msg="\
-<p>The following <u>$input_type</u> could not be opened.</p>
+<p>The following <u>${input_type}</u> could not be opened.</p>
 
-<p><code><blockquote>$input_object_stripped_and_trimmed$extra_long_link</blockquote></code></p>
+<p><code><blockquote>${input_object_stripped_and_trimmed}${extra_long_link}</blockquote></code></p>
 
 <p>For security reasons, opening links while booted in '<code>PERSISTENT Mode | SYSMAINT Session</code>' is not supported.</p>
 <p>Ensure a suitable web browser is installed, then reboot into '<code>PERSISTENT Mode | USER Session</code>' or '<code>LIVE Mode | USER Session</code>' to browse the Web.</p>"
-   /usr/libexec/msgcollector/generic_gui_message.py "error" "$title" "$msg" "$question" "$button"
+   /usr/libexec/msgcollector/generic_gui_message.py "error" "${title}" "${msg}" "${question}" "${button}"
    exit 1
 }
 
 workstation() {
-   if [ "$is_file" = "1" ]; then
-      [ -n "$open_in_tool_bin" ] || open_in_tool_bin="xdg-open"
+   local careful_text xdg_file_type xdg_desktop_file open_in_tool_path
 
-      if [ "$open_in_tool_bin" = "xdg-open" ]; then
+   if [ "${is_file}" = "1" ]; then
+      [ -n "${open_in_tool_bin}" ] || open_in_tool_bin="xdg-open"
+
+      if [ "${open_in_tool_bin}" = "xdg-open" ]; then
          ## Qubes sets 'GNOME_DESKTOP_SESSION_ID=c1' therefore `xdg-open`
          ## detects gnome and sets 'DE=gnome3' which leads to
          ## `xdg-mime query filetype` output being empty "". Therefore,
          ## setting 'DE=generic'.
-         xdg_file_type="$(DE=generic xdg-mime query filetype "$input_object_original")" || true
-         xdg_desktop_file="$(DE=generic xdg-mime query default "$xdg_file_type")" || true
-         open_in_tool_bin_name="$xdg_desktop_file"
+         xdg_file_type="$(DE=generic xdg-mime query filetype "${input_object_original}")" || true
+         xdg_desktop_file="$(DE=generic xdg-mime query default "${xdg_file_type}")" || true
+         open_in_tool_bin_name="${xdg_desktop_file}"
       fi
    else
       if test -e /usr/share/kicksecure/marker ; then
          if has brave-browser; then
-            [ -n "$open_in_tool_bin" ] || open_in_tool_bin="brave-browser"
+            [ -n "${open_in_tool_bin}" ] || open_in_tool_bin="brave-browser"
          fi
          if has chromium; then
-            [ -n "$open_in_tool_bin" ] || open_in_tool_bin="chromium"
+            [ -n "${open_in_tool_bin}" ] || open_in_tool_bin="chromium"
          fi
          if has firefox; then
-            [ -n "$open_in_tool_bin" ] || open_in_tool_bin="firefox"
+            [ -n "${open_in_tool_bin}" ] || open_in_tool_bin="firefox"
          fi
          if has mullvad-browser; then
-            [ -n "$open_in_tool_bin" ] || open_in_tool_bin="mullvad-browser"
+            [ -n "${open_in_tool_bin}" ] || open_in_tool_bin="mullvad-browser"
          fi
          ## Intentionally skipping torbrowser, because the command may exist
          ## even if the browser is not installed.
          if has browser-choice ; then
-            [ -n "$open_in_tool_bin" ] || open_in_tool_bin="browser-choice"
+            [ -n "${open_in_tool_bin}" ] || open_in_tool_bin="browser-choice"
          fi
       else
         if has torbrowser; then
-          [ -n "$open_in_tool_bin" ] || open_in_tool_bin="torbrowser"
+          [ -n "${open_in_tool_bin}" ] || open_in_tool_bin="torbrowser"
         fi
       fi
 
-      [ -n "$open_in_tool_bin" ] || open_in_tool_bin="x-www-browser"
+      [ -n "${open_in_tool_bin}" ] || open_in_tool_bin="x-www-browser"
       #[ -n "$open_in_tool_extra_opts" ] || open_in_tool_extra_opts="--new-tab"
 
-      [ -n "$open_in_tool_bin_name_readlink" ] || open_in_tool_bin_name_readlink="$(readlink -f "$(command -v "$open_in_tool_bin")")"
-      [ -n "$open_in_tool_bin_name" ] || open_in_tool_bin_name="$open_in_tool_bin ($open_in_tool_bin_name_readlink)"
+      ## A browser that is not installed must not be treated as a script bug:
+      ## the lookup is allowed to come back empty, and 'final' reports the
+      ## missing program through its own dialog. Without the tolerance the ERR
+      ## trap fires here -- inside a command substitution, so its 'exit 1' ends
+      ## only the subshell and the dialog's own stdout lands in this variable.
+      if [ -z "${open_in_tool_bin_name_readlink}" ]; then
+         open_in_tool_path="$(type -P "${open_in_tool_bin}")" || true
+         open_in_tool_bin_name_readlink="$(readlink -f "${open_in_tool_path}")" || true
+      fi
+      [ -n "${open_in_tool_bin_name}" ] || open_in_tool_bin_name="${open_in_tool_bin} (${open_in_tool_bin_name_readlink})"
 
       ## Prettier name in default case.
-      if [ "$open_in_tool_bin_name" = "x-www-browser (/usr/bin/torbrowser)" ]; then
+      if [ "${open_in_tool_bin_name}" = "x-www-browser (/usr/bin/torbrowser)" ]; then
          open_in_tool_bin_name="Tor Browser"
       fi
    fi
 
    ## Fallback.
-   [ ! -n "$tb_title" ] || open_in_tool_bin_name="$tb_title"
-   [ -n "$open_in_tool_bin_name" ] || open_in_tool_bin_name="$open_in_tool_bin"
+   [ -z "${tb_title}" ] || open_in_tool_bin_name="${tb_title}"
+   [ -n "${open_in_tool_bin_name}" ] || open_in_tool_bin_name="${open_in_tool_bin}"
 
-   if [ "$open_in_tool_bin_name_readlink" = "${BASH_SOURCE[0]}" ]; then
+   if [ "${open_in_tool_bin_name_readlink}" = "${BASH_SOURCE[0]}" ]; then
       title="Link Confirm Open ERROR"
-      msg="<p>The following <b>$input_type</b> cannot be opened in <u>$open_in_tool_bin_name</u>, because no browser is installed, that supports open-link-confirmation.</p>
-<p><code><blockquote>$input_object_stripped_and_trimmed$extra_long_link</blockquote></code></p>"
+      msg="<p>The following <b>${input_type}</b> cannot be opened in <u>${open_in_tool_bin_name}</u>, because no browser is installed, that supports open-link-confirmation.</p>
+<p><code><blockquote>${input_object_stripped_and_trimmed}${extra_long_link}</blockquote></code></p>"
       question=""
       button="ok"
-      /usr/libexec/msgcollector/generic_gui_message.py "error" "$title" "$msg" "$question" "$button"
+      /usr/libexec/msgcollector/generic_gui_message.py "error" "${title}" "${msg}" "${question}" "${button}"
       exit 0
    fi
-
-   local careful_text
 
    if test -e /usr/share/kicksecure/marker ; then
       careful_text="<p></p>"
    else
-      careful_text="<p>Be careful if <b>$open_in_tool_bin_name</b> is already running as your activities might get linked.</p>"
+      careful_text="<p>Be careful if <b>${open_in_tool_bin_name}</b> is already running as your activities might get linked.</p>"
    fi
 
-   if [ "$input_object_stripped_and_trimmed" = "" ] || [ "$input_object_stripped_and_trimmed" = " " ]; then
+   if [ "${input_object_stripped_and_trimmed}" = "" ] || [ "${input_object_stripped_and_trimmed}" = " " ]; then
       if test -e /usr/share/kicksecure/marker ; then
          skip_open_link_confirmation="1"
          return 0
       else
          title="Confirm Open"
-         msg="$careful_text
-<p>$input_object_stripped_and_trimmed$extra_long_link</p>"
-         question="Do you want to open <b>$open_in_tool_bin_name</b>?"
+         msg="${careful_text}
+<p>${input_object_stripped_and_trimmed}${extra_long_link}</p>"
+         question="Do you want to open <b>${open_in_tool_bin_name}</b>?"
          button="yesno"
          return 0
       fi
    fi
 
    title="Confirm Open"
-   msg="<p>The following <b>$input_type</b> will be opened in <u>$open_in_tool_bin_name</u>.</p>
-$careful_text
-<p><code><blockquote>$input_object_stripped_and_trimmed$extra_long_link</blockquote></code></p>"
+   msg="<p>The following <b>${input_type}</b> will be opened in <u>${open_in_tool_bin_name}</u>.</p>
+${careful_text}
+<p><code><blockquote>${input_object_stripped_and_trimmed}${extra_long_link}</blockquote></code></p>"
    question="Continue?"
    button="yesno"
    return 0
 }
 
 final() {
-   local ask_for_confirmation="1"
-   if [ "$is_file" = "1" ]; then
+   local ask_for_confirmation answer open_in_tool_exit_code
+   local error_question error_button error_msg
+
+   ask_for_confirmation="1"
+   if [ "${is_file}" = "1" ]; then
       ## Got a File.
-      if [ "$link_confirmation_for_files" = "0" ]; then
-         local ask_for_confirmation="0"
+      if [ "${link_confirmation_for_files}" = "0" ]; then
+         ask_for_confirmation="0"
       else
-         local ask_for_confirmation="1"
+         ask_for_confirmation="1"
       fi
    else
       ## Got a Link.
-      if [ "$link_confirmation_for_links" = "0" ]; then
-         local ask_for_confirmation="0"
+      if [ "${link_confirmation_for_links}" = "0" ]; then
+         ask_for_confirmation="0"
       else
-         local ask_for_confirmation="1"
+         ask_for_confirmation="1"
       fi
    fi
 
    ## On first invocation in Qubes DispVM, skip asking for confirmation.
    ## https://github.com/QubesOS/qubes-issues/issues/4113
-   if [ "$qubes_type" = "DispVM" ]; then
+   if [ "${qubes_type}" = "DispVM" ]; then
       if [ -f ~/.open-link-confirmation ]; then
          true "${HOME}/.open-link-confirmation already exists. Leaving variable ask_for_confirmation as is."
       else
          true "${HOME}/.open-link-confirmation does not exist yet. Setting ask_for_confirmation=0."
-         local ask_for_confirmation="0"
+         ask_for_confirmation="0"
          touch ~/.open-link-confirmation
       fi
    fi
 
-   if [ "$skip_open_link_confirmation" = "1" ]; then
+   if [ "${skip_open_link_confirmation}" = "1" ]; then
       true
    else
-      if [ "$ask_for_confirmation" = "1" ]; then
-         local answer
+      if [ "${ask_for_confirmation}" = "1" ]; then
          answer="0"
-         answer="$(/usr/libexec/msgcollector/generic_gui_message.py "warning" "$title" "$msg" "$question" "$button")"
-         if [ ! "$answer" = "16384" ]; then ## Button 'Yes' has not been pressed.
+         answer="$(/usr/libexec/msgcollector/generic_gui_message.py "warning" "${title}" "${msg}" "${question}" "${button}")"
+         if [ ! "${answer}" = "16384" ]; then ## Button 'Yes' has not been pressed.
             exit 0
          fi
       fi
    fi
 
-   if ! has "$open_in_tool_bin"; then
-      local question=""
-      local button="ok"
-      local msg="<p><b><u>ERROR</b></u>: <b>$open_in_tool_bin</b> does not exist! Please report this bug!</p>"
-      /usr/libexec/msgcollector/generic_gui_message.py "error" "$title" "$msg" "$question" "$button"
+   if ! has "${open_in_tool_bin}"; then
+      error_question=""
+      error_button="ok"
+      error_msg="<p><b><u>ERROR</b></u>: <b>${open_in_tool_bin}</b> does not exist! Please report this bug!</p>"
+      /usr/libexec/msgcollector/generic_gui_message.py "error" "${title}" "${error_msg}" "${error_question}" "${error_button}"
       exit 1
    fi
 
-   local open_in_tool_exit_code
    open_in_tool_exit_code="0"
-   DE=generic "$open_in_tool_bin" $open_in_tool_extra_opts "$@" >/dev/null 2>/dev/null || { open_in_tool_exit_code="$?" ; true; };
+   ## Deliberately unquoted, same reason as in 'gateway'.
+   # shellcheck disable=SC2086
+   DE=generic "${open_in_tool_bin}" ${open_in_tool_extra_opts} "$@" >/dev/null 2>/dev/null \
+      || open_in_tool_exit_code="$?"
 
    ## Do not show an error popup.
    ## For example if Tor Browser or Firefox gets killed, the exit code should be handled by the calling application as per usual.
@@ -413,7 +495,7 @@ final() {
 #       /usr/libexec/msgcollector/generic_gui_message.py "error" "$title" "$msg" "$question" "$button"
 #    fi
 
-   exit "$open_in_tool_exit_code"
+   exit "${open_in_tool_exit_code}"
 }
 
 main_function() {

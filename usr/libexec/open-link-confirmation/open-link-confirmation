@@ -376,7 +376,11 @@ workstation() {
          open_in_tool_path="$(type -P "${open_in_tool_bin}")" || true
          open_in_tool_bin_name_readlink="$(readlink -f "${open_in_tool_path}")" || true
       fi
-      [ -n "${open_in_tool_bin_name}" ] || open_in_tool_bin_name="${open_in_tool_bin} (${open_in_tool_bin_name_readlink})"
+      if [ -n "${open_in_tool_bin_name_readlink}" ]; then
+         [ -n "${open_in_tool_bin_name}" ] || open_in_tool_bin_name="${open_in_tool_bin} (${open_in_tool_bin_name_readlink})"
+      else
+         [ -n "${open_in_tool_bin_name}" ] || open_in_tool_bin_name="${open_in_tool_bin}"
+      fi
 
       ## Prettier name in default case.
       if [ "${open_in_tool_bin_name}" = "x-www-browser (/usr/bin/torbrowser)" ]; then

@@ -1,3 +1,9 @@
+open-link-confirmation (3:9.1-1) unstable; urgency=medium
+
+  * New upstream version (local package).
+
+ -- Patrick Schleizer <adrelanos@whonix.org>  Sun, 16 Aug 2026 08:22:23 +0000
+
 open-link-confirmation (3:9.0-1) unstable; urgency=medium
 
   * New upstream version (local package).

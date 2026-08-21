@@ -9,6 +9,7 @@ set -o pipefail
 set -o errtrace
 shopt -s inherit_errexit
 shopt -s shift_verbose
+export LC_ALL=C
 
 ## 'errexit is important'. For example if open-link-confirmation is called from
 ## other applications that are confined (by AppArmor or otherwise),
@@ -51,12 +52,8 @@ shopt -s shift_verbose
 [ -v question ] || question=""
 [ -v title ] || title=""
 
-## shellcheck cannot follow this in an isolated single-repo checkout, where
-## helper-scripts is not a sibling; the source= path documents where the file
-## lives in the derivative-maker tree.
 # shellcheck source=../../../../helper-scripts/usr/libexec/helper-scripts/strings.bsh
-# shellcheck disable=SC1091
-source /usr/libexec/helper-scripts/strings.bsh
+source "${HELPER_SCRIPTS_PATH:-}"/usr/libexec/helper-scripts/strings.bsh
 
 ## Reached only through the ERR trap below, which shellcheck does not connect
 ## to this definition in this file.
@@ -96,8 +93,7 @@ exit_code: <code>${exit_code}</code>"
 trap error_handler ERR
 
 # shellcheck source=../../../../helper-scripts/usr/libexec/helper-scripts/has.sh
-# shellcheck disable=SC1091
-source /usr/libexec/helper-scripts/has.sh
+source "${HELPER_SCRIPTS_PATH:-}"/usr/libexec/helper-scripts/has.sh
 
 source_config() {
    ## Environment variables take precedence over the configuration files.

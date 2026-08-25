@@ -1,9 +1,99 @@
+commit a259d9b45e23b4f3f024e64f5a1d13ec555d1470
+Merge: da20ef5 f9846e9
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Mon Aug 24 02:15:34 2026 -0400
+
+    Merge remote-tracking branch 'refs/remotes/org-ai-assisted/ai'
+
+commit f9846e977a81e1685f2f00ddf1f8a48627c5aba2
+Author: claude (dev272 e8b76afb-795c-4739-8ebd-023de854021e) <noreply@anthropic.com>
+Date:   Fri Aug 21 04:32:21 2026 -0400
+
+    open-link-confirmation: source helper-scripts via HELPER_SCRIPTS_PATH, drop SC1091 disable
+
+    - open-link-confirmation: use source "${HELPER_SCRIPTS_PATH:-}"/usr/libexec/helper-scripts/<f>;
+      drop the dead '# shellcheck disable=SC1091' and the stale sibling note.
+    - completed pre-existing whole-file style debt (R-010 strict-mode block: add export LC_ALL=C).
+
+    Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
+
+commit da20ef53613a736e3b44dcd8c2a3f9fbc35af430
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sun Aug 16 08:22:23 2026 +0000
+
+    bumped changelog version
+
 commit 33f56ca8e89674ca6c60e2268d76f14485f19e28
 Merge: 7afc172 1848736
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Sat Aug 15 12:54:50 2026 -0400
 
     Merge remote-tracking branch 'refs/remotes/org-ai-assisted/master'
+
+commit 342f676f1e686b5cdf2d69306fd1457637ebbb73
+Author: claude (dev182 e09ec5cf-4ebf-4e1b-88e5-55fbac6ef1d3) <noreply@anthropic.com>
+Date:   Mon Aug 10 13:54:39 2026 -0400
+
+    open-link-confirmation: do not append empty readlink parenthetical
+
+    - When the readlink lookup came back empty, the name became
+      "<bin> ()" -- a bogus trailing parenthetical shown to the user.
+    - Only append the "(<path>)" suffix when the readlink value is
+      non-empty; otherwise fall back to the bare bin name.
+
+    Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
+
+commit 0d97ed17234a7ff058f660aa71451003336b7830
+Author: claude (dev170 ad818220-b8bb-4205-b850-b65074e52454) <noreply@anthropic.com>
+Date:   Sat Aug 8 12:47:28 2026 -0400
+
+    open-link-confirmation: R-010 strict mode
+
+    - strict-mode block, nounset-safe defaults for every variable the caller, a
+      config file or another function may leave unset, R-020 braces, R-034 printf,
+      R-051 bare ERR trap target, R-011 '|| rc=$?' instead of '|| { rc=$?; true; }'.
+    - 'command -v' replaced by 'type -P' (R-090): the value wanted is a PATH,
+      which is what type -P returns; 'has' answers presence, not location.
+    - the two exec-a-browser lines keep an UNQUOTED open_in_tool_extra_opts, with
+      SC2086 disabled and the reason stated: it carries zero or more separate
+      options, so the shell must word-split it.
+    - the ERR trap is registered after its handler, and the handler carries a
+      SC2317 waiver; vm_name carries SC2034 with the reason it is still read.
+
+    BEHAVIOUR CHANGE, deliberate and the reason for the change below it: R-010
+    requires errtrace, and errtrace makes the ERR trap reach inside shell
+    functions for the first time. Every function in this file previously bypassed
+    the trap, so error_handler was effectively dead code. With it live, the
+    browser lookup
+
+        open_in_tool_bin_name_readlink="$(readlink -f "$(command -v ...)")"
+
+    fires the trap INSIDE a command substitution when no browser is installed:
+    the handler's 'exit 1' then ends only the subshell, the dialog's own stdout is
+    captured as the browser path, and the user gets three dialogs. The lookup is
+    now allowed to come back empty, and the missing program is reported by the
+    'does not exist' dialog this file already had. Previously that condition
+    exited 1 silently with no dialog at all.
+
+    Verified by a differential emit harness
+    (~/strict-pass-tests/olc-test/emit.sh), which stubs every external command and
+    compares, per case: stdout+stderr byte for byte, the exit code, and the
+    ordered sequence of commands with full argv -- so both the dialog text and the
+    browser command line are byte-compared. 27 cases, 27 identical. The missing
+    browser case is asserted rather than compared, since that is the behaviour
+    being replaced: exit 1, the missing-program dialog shown, and no script-bug
+    dialog.
+
+    Canaried in both directions: injecting an unquoted "$@" on the browser exec
+    makes 17 cases fail, and changing one dialog string by a single character
+    makes the output comparison fail. shellcheck and the static gate pass both
+    injections.
+
+    Gate: pre-push-static --staged exit 0, and ci-repro.sh --worktree
+    kicksecure/open-link-confirmation exit 0 (isolated single-repo checkout, the
+    condition CI sees).
+
+    Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
 
 commit 1848736bef0ab001ac3fc995655407615694332c
 Merge: 7afc172 5246c5e

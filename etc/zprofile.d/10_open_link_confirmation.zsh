@@ -1,0 +1,1 @@
+../profile.d/15_open_link_confirmation.sh

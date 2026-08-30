@@ -11,7 +11,7 @@ shopt -s inherit_errexit
 shopt -s shift_verbose
 export LC_ALL=C
 
-## 'errexit is important'. For example if open-link-confirmation is called from
+## 'errexit' is important. For example if open-link-confirmation is called from
 ## other applications that are confined (by AppArmor or otherwise),
 ## sanitize-string might fail.
 # /usr/bin/sanitize-string https://www.whonix.org
@@ -21,52 +21,42 @@ export LC_ALL=C
 # /usr/bin/torbrowser: /usr/libexec/msgcollector/msgcollector: /bin/bash: bad interpreter: Permission denied
 # /usr/bin/torbrowser: /usr/libexec/msgcollector/msgcollector: /bin/bash: bad interpreter: Permission denied
 
-## Supplied by the caller's environment, by an /etc/open_link_confirm.d config
-## file, or by one branch of this script and read in another. Any of them can
-## legitimately be absent, so give them a defined value here rather than let a
-## bare read abort the dialog under nounset. The '[ -n ... ] ||' defaults below
-## stay as they are: they also replace an EXPLICITLY EMPTY value, which
-## '[ -v ... ]' does not.
-[ -v EDITOR ] || EDITOR=""
-[ -v OPEN_LINK_CONFIRMATION_COUNTER ] || OPEN_LINK_CONFIRMATION_COUNTER=""
-[ -v OPEN_LINK_CONFIRMATION_MAXIMUM ] || OPEN_LINK_CONFIRMATION_MAXIMUM=""
-[ -v extra_long_link ] || extra_long_link=""
-[ -v in_sysmaint_mode ] || in_sysmaint_mode=""
-[ -v input_object_original ] || input_object_original=""
-[ -v input_object_stripped_and_trimmed ] || input_object_stripped_and_trimmed=""
-[ -v input_type ] || input_type=""
-[ -v is_file ] || is_file=""
-[ -v link_confirmation_for_files ] || link_confirmation_for_files=""
-[ -v link_confirmation_for_links ] || link_confirmation_for_links=""
-[ -v link_confirmation_vm_open_tool ] || link_confirmation_vm_open_tool=""
-[ -v open_in_tool_bin ] || open_in_tool_bin=""
-[ -v open_in_tool_bin_name ] || open_in_tool_bin_name=""
-[ -v open_in_tool_bin_name_readlink ] || open_in_tool_bin_name_readlink=""
-[ -v open_in_tool_extra_opts ] || open_in_tool_extra_opts=""
-[ -v qubes_detected ] || qubes_detected=""
-[ -v qubes_type ] || qubes_type=""
-[ -v skip_open_link_confirmation ] || skip_open_link_confirmation=""
-[ -v tb_title ] || tb_title=""
-[ -v button ] || button=""
-[ -v msg ] || msg=""
-[ -v question ] || question=""
-[ -v title ] || title=""
-
 # shellcheck source=../../../../helper-scripts/usr/libexec/helper-scripts/strings.bsh
 source "${HELPER_SCRIPTS_PATH:-}"/usr/libexec/helper-scripts/strings.bsh
 
-## Reached only through the ERR trap below, which shellcheck does not connect
-## to this definition in this file.
+default_if_empty EDITOR ""
+default_if_empty OPEN_LINK_CONFIRMATION_COUNTER ""
+default_if_empty OPEN_LINK_CONFIRMATION_MAXIMUM ""
+default_if_empty extra_long_link ""
+default_if_empty in_sysmaint_mode ""
+default_if_empty input_object_original ""
+default_if_empty input_object_stripped_and_trimmed ""
+default_if_empty input_type ""
+default_if_empty is_file ""
+default_if_empty link_confirmation_for_files ""
+default_if_empty link_confirmation_for_links ""
+default_if_empty link_confirmation_vm_open_tool ""
+default_if_empty open_in_tool_bin ""
+default_if_empty open_in_tool_bin_name ""
+default_if_empty open_in_tool_bin_name_readlink ""
+default_if_empty open_in_tool_extra_opts ""
+default_if_empty qubes_detected ""
+default_if_empty qubes_type ""
+default_if_empty skip_open_link_confirmation ""
+default_if_empty tb_title ""
+default_if_empty button ""
+default_if_empty msg ""
+default_if_empty question ""
+default_if_empty title ""
+
 # shellcheck disable=SC2317
 error_handler() {
-   ## Must stay the first statement and keep its initialiser: a bare 'local
-   ## exit_code' would run the 'local' builtin first and reset $? to 0.
    local exit_code="$?"
    local error_message error_title error_question error_button error_body
 
    ## sanitize-string may fail (e.g. AppArmor-confined caller, see file header).
    ## Tolerate it with '|| true' so this ERR trap still shows its dialog instead
-   ## of aborting / re-entering under 'errexit'.
+   ## of aborting / re-entering under errexit.
    error_message="${0} script bug.
 
 No panic. Nothing is broken. Just some rare condition has been hit.
@@ -88,8 +78,6 @@ exit_code: <code>${exit_code}</code>"
    exit 1
 }
 
-## Registered after the definition so shellcheck can see the handler is
-## used; nothing runs in between, so the coverage is unchanged.
 trap error_handler ERR
 
 # shellcheck source=../../../../helper-scripts/usr/libexec/helper-scripts/has.sh
@@ -113,7 +101,6 @@ source_config() {
       ; do
       ## TODO
       bash -n "${config_file}" || exit 1
-      ## Dynamic path from the glob above; R-081 prescribes SC1090 here.
       # shellcheck disable=SC1090
       source "${config_file}"
    done
@@ -230,9 +217,6 @@ gateway() {
       #msg="$input_object_original will be opened in $open_in_tool_bin_name. Continue?"
 
       open_in_tool_exit_code="0"
-      ## Deliberately unquoted: open_in_tool_extra_opts carries zero or more
-      ## separate options, so the shell must split it into words. Quoting it
-      ## would pass one empty argument to the editor.
       # shellcheck disable=SC2086
       "${open_in_tool_bin}" ${open_in_tool_extra_opts} "${input_object_original}" >/dev/null 2>/dev/null \
          || open_in_tool_exit_code="$?"
@@ -258,14 +242,12 @@ gateway() {
 }
 
 qubes_redirect() {
-   local vm_name link_confirmation_vm_open_tool_exit_code
+   local link_confirmation_vm_open_tool_exit_code
    local link_confirmation_vm_open_tool_output
-   local sanitized_open_tool sanitized_open_tool_output
+   local sanitized_open_tool_output
 
-   ## Read for its failure, not its value: on a Qubes VM without a working
-   ## qubesdb this aborts before an open is attempted.
-   # shellcheck disable=SC2034
-   vm_name="$(qubesdb-read /name)"
+   ## Make sure qubesdb is working.
+   qubesdb-read /name >/dev/null
 
    [ -n "${link_confirmation_vm_open_tool}" ] || link_confirmation_vm_open_tool="qvm-open-in-dvm"
 
@@ -282,7 +264,8 @@ qubes_redirect() {
       exit 0
    fi
 
-   sanitized_open_tool="$(sanitize-string -- 255 "${link_confirmation_vm_open_tool}")"
+   ## No need to sanitize the name of the open tool itself, only its output
+   ## needs sanitized, and even that might be superfluous.
    sanitized_open_tool_output="$(sanitize-string -- 255 "${link_confirmation_vm_open_tool_output}")"
 
    title="Link Confirm Open ERROR"
@@ -297,7 +280,7 @@ qubes_redirect() {
 <p>Use ${tb_title} under Workstation to browse the internet.</p>
 
 <p>Debugging information:
-<br></br>link_confirmation_vm_open_tool: <code>${sanitized_open_tool}</code>
+<br></br>link_confirmation_vm_open_tool: <code>${link_confirmation_vm_open_tool}</code>
 <br></br>input_object_stripped_and_trimmed: <code>${input_object_stripped_and_trimmed}</code>
 <br></br>link_confirmation_vm_open_tool_output: <code>${sanitized_open_tool_output}</code>
 <br></br>link_confirmation_vm_open_tool_exit_code: <u>${link_confirmation_vm_open_tool_exit_code}</u></p>"
@@ -363,11 +346,6 @@ workstation() {
       [ -n "${open_in_tool_bin}" ] || open_in_tool_bin="x-www-browser"
       #[ -n "$open_in_tool_extra_opts" ] || open_in_tool_extra_opts="--new-tab"
 
-      ## A browser that is not installed must not be treated as a script bug:
-      ## the lookup is allowed to come back empty, and 'final' reports the
-      ## missing program through its own dialog. Without the tolerance the ERR
-      ## trap fires here -- inside a command substitution, so its 'exit 1' ends
-      ## only the subshell and the dialog's own stdout lands in this variable.
       if [ -z "${open_in_tool_bin_name_readlink}" ]; then
          open_in_tool_path="$(type -P "${open_in_tool_bin}")" || true
          open_in_tool_bin_name_readlink="$(readlink -f "${open_in_tool_path}")" || true
@@ -481,7 +459,6 @@ final() {
    fi
 
    open_in_tool_exit_code="0"
-   ## Deliberately unquoted, same reason as in 'gateway'.
    # shellcheck disable=SC2086
    DE=generic "${open_in_tool_bin}" ${open_in_tool_extra_opts} "$@" >/dev/null 2>/dev/null \
       || open_in_tool_exit_code="$?"
